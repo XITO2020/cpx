@@ -1,0 +1,38 @@
+@font-face {
+    font-family: 'kghappy';
+    src: url('/fonts/KGHAPPY.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: 'kghappy-shadow';
+    src:url('/fonts/KGHAPPYShadows.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: 'toe-jam';
+    src: url('/fonts/toe-jam.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: 'earl';
+    src: url('/fonts/earl.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: 'doubledecker';
+    src: url('/fonts/doubledecker.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  @font-face {
+    font-family: 'subway';
+    src: url('/fonts/matrix.ttf') format('truetype');
+  }
+  .subway{font-family:'subway';}
+
+  
