@@ -14,8 +14,8 @@
 
 # production
 /build
-/public/thumbnails
-/public/videos
+/public/thumbnails/** 
+/public/videos/**
 # misc
 .DS_Store
 *.pem
