@@ -1,26 +1,31 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import prismadb from '@/lib/prismadb';
-import serverAuth from '@/lib/serverAuth';
-import { User } from '@/lib/types';
+import { NextApiRequest, NextApiResponse } from 'next'
+import prismadb from '@/lib/prismadb'
+import serverAuth from '@/lib/serverAuth'
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+
+// SERT A AFFICHER LA LISTE DES FAVORIS
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  try {
     if (req.method !== 'GET') {
-        return res.status(405).end();
+      return res.status(405).end()
     }
-    try{
-        const response = await serverAuth(req);
-        const currentUser: User | undefined = response.currentUser;
 
-        const favoriteMovies = await prismadb.movie.findMany({
-            where: {
-                id : {
-                    in : currentUser?.favoriteIds,
-                }
-            }
-        });
-        return res.status(200).json(favoriteMovies);
-    }catch(error){
-        console.log(error);
-        return res.status(400).end();
-    }
+    const { currentUser } = await serverAuth(req, res)
+
+    const favoriteMovies = await prismadb.movie.findMany({
+      where: {
+        id: {
+          in: currentUser?.favoriteIds || [],
+        },
+      },
+    })
+
+    return res.status(200).json(favoriteMovies)
+  } catch (error) {
+    console.error('Error in /api/favorites:', error)
+    return res.status(500).json({ error: 'Internal server error' })
+  }
 }

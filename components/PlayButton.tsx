@@ -6,7 +6,7 @@ interface PlayButtonProps {
     movieId : string;
 }
 
-const PlayButton: React.FC<PlayButtonProps> = ({ movieId}) =>{
+const PlayButton: React.FC<PlayButtonProps> = ({ movieId }) =>{
     const router = useRouter();
 
     return (

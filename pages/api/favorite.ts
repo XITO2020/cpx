@@ -1,65 +1,42 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { without } from 'lodash';
+import { getSession } from 'next-auth/react';
 import prismadb from '@/lib/prismadb';
-import serverAuth from '@/lib/serverAuth';
-import { User } from '@/lib/types';
+import type {CustomSession} from '@/lib/types'
 
+// SERT A AJOUTER DES FAVORIS A L UTILISATEUR
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    try {
-        const response = await serverAuth(req);
-        const currentUser: User | undefined = response.currentUser;
-
-        if (!currentUser) {
-            console.log("Error: No current user found");
-            return res.status(401).json({ error: "Not authenticated" });
-        }
-
-        const { movieId } = req.body;
-
-        console.log("movieId from req.body:", movieId);
-        const existingMovie = await prismadb.movie.findUnique({
-            where: {
-                id: movieId,
+    if (req.method !== 'POST' && req.method !== 'DELETE') {
+        return res.status(405).end();
     }
-});
 
+    const session: CustomSession | null = await getSession({ req }) as CustomSession;
+    console.log(session.user)
+    if (!session || !session.user || !session.user.id) {
+        return res.status(401).json({ error: "User not auth-ed in favorite.ts" });
+        
+    }
+    console.log("session recupérée dans favorite.ts: ",session)
+    const userId = session.user['id'];
+    const { movieId } = req.body;
 
-        if (!existingMovie) {
-            console.log("Error: Invalid movie ID");
-            return res.status(400).json({ error: "Invalid movie ID" });
-        }
-
+    try {
         if (req.method === 'POST') {
-            console.log("Handling POST request...");
-            const user = await prismadb.user.update({
-                where: {
-                    email: currentUser.email,
-                },
-                data: {
-                    favoriteIds: {
-                        push: movieId,
-                    }
-                }
+            // Ajoutez le movieId aux favoris de l'utilisateur
+            await prismadb.user.update({
+                where: { id: userId },
+                data: { favoriteIds: { push: movieId } },
             });
-            return res.status(200).json(user);
         } else if (req.method === 'DELETE') {
-            console.log("Handling DELETE request...");
-            const updatedFavoriteIds = without(currentUser.favoriteIds, movieId);
-            const updatedUser = await prismadb.user.update({
-                where: {
-                    email: currentUser.email,
-                },
-                data: {
-                    favoriteIds: updatedFavoriteIds,
-                },
+            // Supprimez le movieId des favoris de l'utilisateur
+            await prismadb.user.update({
+                where: { id: userId },
+                data: { favoriteIds: { set: [] } },
             });
-            return res.status(200).json(updatedUser);
-        } else {
-            console.log("Error: Invalid request method");
-            return res.status(405).json({ error: "Method not allowed" });
         }
+
+        return res.status(200).json({ message: "Favorite updated successfully" });
     } catch (error) {
-        console.error("API Error:", error);
+        console.error("Error in /api/favorite:", error);
         return res.status(500).json({ error: "Internal server error" });
     }
 }

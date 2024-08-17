@@ -35,4 +35,9 @@
   }
   .subway{font-family:'subway';}
 
+  @font-face {
+    font-family: 'marvel';
+    src: url('/fonts/marvel.otf') format('opentype');
+  }
+
   

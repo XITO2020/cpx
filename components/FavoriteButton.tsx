@@ -1,77 +1,57 @@
-import React, { useCallback, useMemo, useEffect } from 'react';
 import axios from 'axios';
-import { AiOutlinePlus, AiOutlineCheck } from 'react-icons/ai';
+import React, { useCallback, useMemo } from 'react';
+
+
 import useCurrentUser from '@/hooks/useCurrentUser';
 import useFavorites from '@/hooks/useFavorites';
-import { getSession } from 'next-auth/react'; // Importez getSession
 
 interface FavoriteButtonProps {
-    movieId: string;
-    index: number;
+  movieId: string;
+  index: number;
 }
 
 const FavoriteButton: React.FC<FavoriteButtonProps> = ({ movieId, index }) => {
-    const { mutate: mutateFavorites } = useFavorites();
-    const { data: currentUser, mutate } = useCurrentUser();
+  const { mutate: mutateFavorites } = useFavorites();
 
-    // Utilisez useEffect pour obtenir la session dès que le composant est monté
-    useEffect(() => {
-        const fetchSession = async () => {
-            const session = await getSession();
-            console.log('Session:', session);
-        };
-        fetchSession();
-    }, []);
+  const { data: currentUser, mutate } = useCurrentUser();
 
-    const isFavorite = useMemo(() => {
-        const list = currentUser?.favoriteIds || [];
-        return list.includes(movieId);
-    }, [currentUser, movieId]);
+  const isFavorite = useMemo(() => {
+    const list = currentUser?.favoriteIds || [];
 
-    const toggleFavorites = useCallback(async () => {
-        try {
-            if (isFavorite) {
-                await axios.delete('/api/favorite', { data: { movieId } });
-            } else {
-                await axios.post('/api/favorite', { movieId });
-            }
+    return list.includes(movieId);
+  }, [currentUser, movieId]);
 
-            // Après avoir modifié les favoris, récupérez à nouveau les données de l'utilisateur
-            mutate();
+  const toggleFavorites = useCallback(async () => {
+    let response;
 
-            mutateFavorites();
-        } catch (error) {
-            console.error("Erreur lors de l'appel à l'API:", error);
-        }
-    }, [movieId, isFavorite, mutate, mutateFavorites]);
+    if (isFavorite) {
+      response = await axios.delete('/api/favorite', { data: { movieId } });
+    } else {
+      response = await axios.post('/api/favorite', { movieId });
+    }
 
-    const Icon = isFavorite ? AiOutlineCheck : AiOutlinePlus;
+    const updatedFavoriteIds = response?.data?.favoriteIds;
 
-    return (
-        <div
-            onClick={toggleFavorites}
-            className={`
-        cursor-pointer
-        group/item
-        w-6 h-6
-        lg:w-10 lg:h-10
-        ${index % 5 === 0 ? 'border-yellow-400' :
-                index % 5 === 1 ? 'border-emerald-600' :
-                    index % 5 === 2 ? 'border-violet-600' :
-                        index % 5 === 4 ? 'border-pink-600'
-                            : 'border-pink-500'}
-        border-2
-        rounded-full
-        flex
-        justify-center
-        items-center
-        transition
-        hover:border-neutral-300
-        `}
-        >
-            <Icon className="text-white" size={25} />
-        </div>
-    );
-};
+    mutate({ 
+      ...currentUser, 
+      favoriteIds: updatedFavoriteIds,
+    });
+    mutateFavorites();
+  }, [movieId, isFavorite, currentUser, mutate, mutateFavorites]);
+  
+
+  return (
+    <div onClick={toggleFavorites} className={`cursor-pointer 
+    group/item w-16 h-16 lg:w-10 lg:h-10 
+    ${index % 4 === 0 ? 'text-fuchsia-600' :
+                        index % 4 === 1 ? 'text-yellow-400' :
+                            index % 4 === 2 ? 'text-emerald-800' :
+                                     'text-violet-800'}
+     border-white border-2 rounded-full flex justify-center
+      items-center transition hover:border-neutral-300`}>
+      <p className="text-3xl relative -top-1">+</p>
+    </div>
+  )
+}
 
 export default FavoriteButton;

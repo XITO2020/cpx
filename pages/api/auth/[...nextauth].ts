@@ -1,67 +1,79 @@
-import NextAuth from 'next-auth';
+import NextAuth, { AuthOptions } from 'next-auth';
+import GithubProvider from 'next-auth/providers/github';
+import GoogleProvider from 'next-auth/providers/google';
 import Credentials from 'next-auth/providers/credentials';
+import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { compare } from 'bcrypt';
-import GithubProvider from 'next-auth/providers/github'
-
-
-import { PrismaAdapter } from '@next-auth/prisma-adapter'
-
 import prismadb from '@/lib/prismadb';
+import { User, CustomSession } from '@/lib/types'; 
 
-export default NextAuth({
-  providers: [
-    GithubProvider({
-      clientId : process.env.GITHUB_ID || '',
-      clientSecret : process.env.GITHUB_SECRET || ''
-    }),
-    
+export const authOptions: AuthOptions = {
+  providers: [  
     Credentials({
-      
       id: 'credentials',
-      name : 'Credentials',
+      name: 'Credentials',
       credentials: {
         email: {
-          label:  'Email',
-          type: 'Text',
+          label: 'Email',
+          type: 'text',
         },
         password: {
           label: 'Password',
-          type: 'password',
+          type: 'password'
         }
       },
-      async authorize(credentials){
-        if(!credentials?.email || !credentials?.password ) {
+      async authorize(credentials) {
+        if (!credentials?.email || !credentials?.password) {
           throw new Error('Email and password required');
         }
 
-        console.log("credentials.email:", credentials.email);
-        const user = await prismadb.user.findUnique({
-            where: {
-                email: credentials.email
-            }
-        });
+        const user = await prismadb.user.findUnique({ where: {
+          email: credentials.email
+        }});
 
-        if(!user || !user.hashedPassword){
-          throw new Error('email does not exist')
+        if (!user || !user.hashedPassword) {
+          throw new Error('Email does not exist');
         }
-        const isCorrectPassword = await compare(credentials.password , user.hashedPassword);
-        if(!isCorrectPassword){
-          throw new Error('PAsSwOrd iNcoRReCt!');
+
+        const isCorrectPassword = await compare(credentials.password, user.hashedPassword);
+
+        if (!isCorrectPassword) {
+          throw new Error('Incorrect password');
         }
+
         return user;
       }
     })
   ],
   pages: {
-    signIn: '/auth',
+    signIn: '/auth'
   },
   debug: process.env.NODE_ENV === 'development',
-  adapter : PrismaAdapter(prismadb),
-  session: {
-    strategy : 'jwt',
-  },
+  adapter: PrismaAdapter(prismadb),
+  session: { strategy: 'jwt' },
   jwt: {
     secret: process.env.NEXTAUTH_JWT_SECRET,
   },
   secret: process.env.NEXTAUTH_SECRET,
-});
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+        token.isPremium = (user as User).isPremium; 
+        token.emailVerified = (user as User).emailVerified !== null; // Convertir DateTime en Boolean
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      if (token && session.user) {
+        const user = session.user as User; // Assertion de type pour `session.user`
+        user.id = token.id as string ?? null;
+        user.isPremium = token.isPremium as boolean ?? false;
+        user.emailVerified = token.emailVerified as Date; 
+      }
+      return session;
+    }
+  }
+};
+
+export default NextAuth(authOptions);

@@ -1,10 +1,11 @@
+import { useState, useEffect } from 'react';
+
 export const useMetro = () => {
   const lines = [
     { 
       color: 'bg-pink-600',
       name: 'Ligne 1',
       clipPath: 'polygon(0% 0%, 2% 15%, 7% 20%, 12% 22%, 28% 24%, 31% 26%, 33% 29%, 33% 31%, 40% 68%, 40% 71%, 43% 73%, 48% 74%, 75% 74%, 79% 76%, 81% 79%, 82% 83%, 82% 87%, 82% 100%, 84% 100%, 85% 87%, 85% 83%, 83% 77%, 80% 73%, 75% 71%, 48% 71%, 44% 70%, 43% 67%, 42% 62%, 37% 30%, 36% 26%, 34% 22%, 29% 18%, 14% 18%, 9% 17%, 8% 16%, 7% 13%, 3% 0%)',
-
       stations: [
         { stationName: 'Station A1', link: 'https://www.youtube.com' },
         { stationName: 'Station A2', link: 'https://www.youtube.com' },

@@ -1,0 +1,18 @@
+.container{
+    display:flex;
+    flex-direction: column;
+    justify-content:space-between;
+    width:100%;  
+    border: purple 4px solid;
+    min-height:30vh;
+    padding: 20px 20px;
+}
+
+.great_img{
+    max-width:500px;
+}
+
+.title{
+    margin-left:10px;
+    margin-top:20px;
+}

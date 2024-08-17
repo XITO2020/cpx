@@ -1,0 +1,14 @@
+@media(max-width:571px){
+    .MovieCard {
+        width: 80vw; 
+        margin: 0 2.5rem; 
+      }
+}
+
+@media(max-width:901px){
+    .MovieCard {
+        width: 44vw; 
+        margin: 0 2.5rem;
+        height:35vh; 
+      }
+}

@@ -9,13 +9,33 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
+        'recoil':['Recoleta'],
+        'mag':['Magazine'],
+        'magbold':['Magazine-Bold'],
+        'matrix':['matrix'],
+        'candle':['candle'],
         'toejam': ['toe-jam'],
         'earl': ['earl'],
-        'random': ['doubledecker']
+        'random': ['doubledecker'],
+        'bebas': ['bebas'],
+        'marvel': ['marvel'],
       },
       backgroundImage: {
-        'hero-pattern': "url('/img/hero.jpg')",
+        'hero-pattern': "url('/img/retour.gif')",
         'footer-texture': "url('/img/heroicons.png')",
+      },
+      opacity: {
+        '30': '0.3',
+        '50': '0.5',
+        '70': '0.7', 
+        '90': '0.9', 
+      },
+      dropShadow: {
+        '3xl': '0 35px 35px rgba(75, 125, 100, 0.25)',
+        '4xl': [
+            '0 35px 35px rgba(0, 0, 0, 0.25)',
+            '0 45px 65px rgba(0, 0, 0, 0.15)'
+        ]
       },
       animation: {
         lowsliding: 'lowsliding 80s infinite',

@@ -1,4 +1,4 @@
-import React from 'react';
+import {memo} from 'react';
 import { useRouter } from 'next/router';
 import { BsFillPlayFill } from 'react-icons/bs';
 import { BiChevronDown } from 'react-icons/bi';
@@ -8,31 +8,46 @@ import useCurrentUser from '@/hooks/useCurrentUser';
 
 interface MovieCardProps {
     data: Record<string, any>;
-    index:number;
+    index: number;
 }
 
-const MovieCard : React.FC<MovieCardProps> = ({
-    data, index, ...props
-}) =>{
+const MovieCard: React.FC<MovieCardProps> = ({ data, index, ...props }) => {
     const { data: currentUser } = useCurrentUser();
     const router = useRouter();
-    const {openModal} = useInfoModal();
+    const { openModal } = useInfoModal();
 
-    console.log("Session in MovieCard:", currentUser);
+    const movieYear = data?.year ? parseInt(data.year) : null;
+
+    let displayText = "";
+    let displayColor = "gray";
+    if(movieYear){
+        if (movieYear === 2023 || movieYear === 2024) {
+            displayText = "New  ";
+            displayColor = "text-green-400";
+        } else if (movieYear < 2023) {
+            displayColor="text-gray-400"
+            displayText = "Année:   ";
+        } else {
+            displayText = "Out timed   ";
+            displayColor = "text-crimson";
+        }
+    }
 
     return (
-        <div {...props} className="overflow-hidden hover:overflow-visible filmroll group w-[30vw] border-zinc-900 border-4 border-opacity-90 col-span relative h-[16vw] w- hover:rounded-2xl bg-opacity-40">
+        <div {...props} className="movie-card hover:overflow-visible filmroll 
+        group lg:w-[300px] lg:h-[16vw] sm:h-full sm:w-[90vw] rounded-lg border-opacity-40
+         col-span relative bg-opacity-40 hover:border-rose-600 border-2">
             <img src={data.thumbnailUrl} alt="thumbnailUrl" 
-            className="cursor-pointer object-cover transition rounded-md duration shadow-xl
-            group-hover:opacity-90 sm:group-hover:opacity-0 dealy-300 w-full h-[16vw]
-            "
-            />
-                <div className="opacity-0
+            className=" cursor-pointer object-cover transition rounded-md duration
+             shadow-xl hover:opacity-90 sm:group-hover:opacity-0 w-full h-[16vw]"/>
+            <div className="opacity-0
                 absolute
-                top-0
+                top-4
+                left-5
                 transition
                 duration-200
                 z-10
+                hover:z-40
                 invisible
                 sm:visible
                 delay-100
@@ -43,17 +58,19 @@ const MovieCard : React.FC<MovieCardProps> = ({
                 group-hover:translate-x-[8px]
                 group-hover:opacity-100">
                 <img src={data.thumbnailUrl} alt="thumbnail" 
-                className="
+                className=" 
                 cursor-pointer 
                 object-cover
                 transition 
                 duration 
                 shadow-xl 
-                rounded-t-md 
+                rounded-md 
                 w-full 
-                h-[12vw]
+                lg:h-[12vw] md:h-[16vw] sm:h-[24vw]
+                hover:z-20!
+               
                 "/>
-                <div className="z-10
+                <div className="z-50
                 bg-zinc-900
                 p-2
                 lg:p-4
@@ -78,28 +95,30 @@ const MovieCard : React.FC<MovieCardProps> = ({
 
                         <FavoriteButton movieId={data?.id} index={index} />
 
+                        <p className="text-neutral-500 max-w-6xl">{data.title}</p>
+
                         <div onClick={() =>{openModal(data?.id) }}
                             className="cursor-pointer ml-auto group/item
-                            w-6 h-6 lg:h-10 lg:w-10 border-white rounded-full
-                            border-2 flex justify-center transition
+                            w-6 h-6 lg:h-10 lg:w-10 outline outline-2 rounded-full
+                            flex justify-center transition
                             items-center hover:border-neutral-300">
-                            <BiChevronDown className="text-white group-hover/item:text-rose-500" size={40} />
+                            <BiChevronDown className="rounded-full text-white  bg-zinc-900 group-hover/item:text-green-400" size={40} />
                         </div>
-
-                </div>
-                <p className="text-green-400 font-semibold mt-4">
-                    New <span className="text-white">2023</span>
-                </p>
-                <div className="flex flex-row mt-4 gap-2 items-center">
-                    <p className="text-white text-[-10px] lg-text-sm">{data.duration}</p>    
-                </div> 
-                <div className="flex flex-row mt-4 gap-2 items-center">
-                    <p className="text-rose-500 text-[-10px] lg-text-sm">{data.genre}</p>    
-                </div> 
-            </div>    
+                    </div>
+                    <p className={`font-semibold mt-4 ${displayColor} `} >
+                        {displayText} <span className="text-white">{movieYear}</span>
+                    </p>
+                    <div className="flex flex-row mt-4 gap-2 items-center">
+                        <p className="text-white text-[-10px] lg-text-sm">{data.duration}</p>    
+                    </div> 
+                    <div className="w-full flex flex-row mt-4 gap-2 items-center justify-between">
+                        <p className="text-purple-700 text-[-10px] lg-text-sm">{data.views}<span className="text-white"> vues</span></p>    
+                        <p className="text-fuchsia-500 text-[-10px] lg-text-sm">{data.rating}<span className="text-white"> /10</span></p>    
+                    </div> 
+                </div>    
             </div>
         </div>
     )
 }
 
-export default MovieCard;
+export default memo(MovieCard);

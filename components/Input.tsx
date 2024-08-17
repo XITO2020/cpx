@@ -25,7 +25,7 @@ const Input: React.FC<InputProps> = ({
       className="
         block rounded-md px-6 py-6
         pb-1 w-full text-md text-white
-        bg-emerald-900 appearance-none
+        bg-zinc-950 focus:bg-emerald-950 appearance-none
         focus:outline-none focus:ring-0 
         peer
       "

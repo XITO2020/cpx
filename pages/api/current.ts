@@ -1,16 +1,24 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextApiRequest, NextApiResponse } from 'next'
+import serverAuth from '@/lib/serverAuth-backup-noAdmin'
 
-import serverAuth from '@/lib/serverAuth';
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+  try {
+    console.log('Request received at /api/current')
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    if(req.method !== 'GET') {
-        return res.status(405).end();
+    const { customSession } = await serverAuth(req, res)
+
+    if (!customSession) {
+      res.status(401).json({ message: 'Not authenticated' })
+      return
     }
-    try {
-        const { currentUser } = await serverAuth(req);
-        return res.status(200).json(currentUser)
-    } catch(error) {
-        console.log(error);
-        return res.status(400).end();
-    }
+
+    console.log('User found:', customSession.user)
+
+    res.status(200).json(customSession)
+  } catch (error: any) {
+    console.error('Error in /api/current:', error)
+    res.status(500).json({ message: 'Internal server error' })
+  }
 }
+
+export default handler
