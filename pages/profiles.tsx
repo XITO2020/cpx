@@ -15,6 +15,7 @@ type ProfileProps = {
 
 export const getServerSideProps: GetServerSideProps<ProfileProps> = async (context) => {
   const session = await getServerSession(context.req, context.res, authOptions);
+  console.log("SESSION", session);
 
   if (!session || !session.user || !session.user.email) {
     return {

@@ -60,7 +60,7 @@ export const authOptions: AuthOptions = {
       if (user) {
         token.id = user.id;
         token.isPremium = (user as User).isPremium; 
-        token.emailVerified = (user as User).emailVerified !== null; // Convertir DateTime en Boolean
+        // token.emailVerified = (user as User).emailVerified !== null; // Convertir DateTime en Boolean
       }
       return token;
     },
@@ -69,7 +69,7 @@ export const authOptions: AuthOptions = {
         const user = session.user as User; // Assertion de type pour `session.user`
         user.id = token.id as string ?? null;
         user.isPremium = token.isPremium as boolean ?? false;
-        user.emailVerified = token.emailVerified as Date; 
+        // user.emailVerified = token.emailVerified as Date; 
       }
       return session;
     }
