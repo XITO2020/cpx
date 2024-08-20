@@ -10,7 +10,7 @@ export type User = {
     name: string;
     image?: string;
     email?: string;
-    emailVerified?: Date;
+    emailVerified?: Boolean;
     hashedPassword?: string;
     githubId: string;
     createdAt: Date;
