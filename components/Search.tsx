@@ -47,7 +47,7 @@ export default function Search() {
             <div className="tooltip">
                 
                 <button className="p-1 text-md rounded-xl bg-rose-700 ml-2 font-bold border-none outline-none">
-                <Link href="https://www.fsociety.academy" target="_blank">🐇</Link>
+                <Link href="/search">🐇</Link>
                 </button>
                 
                 

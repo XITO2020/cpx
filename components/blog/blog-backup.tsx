@@ -1,7 +1,7 @@
 import React from 'react';
 import MainArticle from './article/mainArticle-backup';
 import ThumbArticle from './thumbArticle/ThumbArticle';
-import Comments from './Comments';
+import Comments from './comments/Comments';
 import { LinkedArticle } from '../../lib/types';
 
 interface BlogProps {

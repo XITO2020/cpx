@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import serverAuth from '@/lib/serverAuth-backup-noAdmin'
+import serverAuth from '@/lib/serverAuth'
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {

@@ -86,8 +86,8 @@ const AccountMenu: React.FC<AccountMenuProps> = ({
                     { user?.image ? (<img  src={user.image} alt="profile mini image" />)
                     : (<img src='/img/avatars-kings.png' className="w-8 rounded-md" alt="mini image du profil" />) } 
                     
-                     {user ? ( <Link href="profiles" className="px-5 text-white text-sm rounded-md p-4 hover:bg-fuchsia-600 hover:text-bold">
-                        {user.name} </Link>) : (<Link href="auth" className="px-8 w-full text-sm text-white hover:font-bold hover:bg-neutral-600 rounded-md py-4 hover:text-rose-500">👀Watch all now !</Link>)}
+                     {user?.name ? ( <Link href="profiles" className="px-5 text-white text-md rounded-md p-4 hover:bg-fuchsia-600 hover:text-bold w-full">
+                        {session?.user?.name} </Link>) : (<Link href="auth" className="px-8 w-full text-sm text-white hover:font-bold hover:bg-neutral-600 rounded-md py-4 hover:text-rose-500">👀Watch all now !</Link>)}
                 </div>
 
                 <Link href="contact">

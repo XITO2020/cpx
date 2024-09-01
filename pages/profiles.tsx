@@ -7,6 +7,8 @@ import Subway from "@/components/Subway"; // Importer le composant Subway
 import { CustomSession, Movie } from "@/lib/types";
 import { authOptions } from './api/auth/[...nextauth]';
 import prismadb from '@/lib/prismadb'; //
+import Search from '@/components/Search';
+import Favorites from '@/components/Favorites';
 
 type ProfileProps = {
   session: CustomSession | null;
@@ -50,6 +52,12 @@ const Profiles = ({ session, movies }: ProfileProps) => {
     <div className="flex items-center h-full justify-center">
       <div className="flex flex-col">
         <h1 className="text-3xl md:text-6xl text-white text-center">Votre terrier personnel</h1>
+        <div className="mt-8 text-gray-400 flex justify-between
+                          text-2xl text-center w-[560px] mx-auto 
+                          group-hover:text-white capitalize">
+                {session?.user?.name}
+                <Search />
+              </div>
         <div className="flex items-center justify-center gap-8 mt-10">
           <div onClick={() => { router.push('/') }}>
             <div className="group flex-row w-44 mx-auto relative">
@@ -62,11 +70,7 @@ const Profiles = ({ session, movies }: ProfileProps) => {
                 {!session?.user || !session?.user?.image ? (<img src="/img/mickaelbroughtsome.png" alt="avatar test" />)
                   : (<img src={session?.user?.image} alt="image test" />)}
               </div>
-              <div className="mt-4 text-gray-400
-                          text-2xl text-center
-                          group-hover:text-white">
-                {session?.user?.name}
-              </div>
+              
               <div className="absolute bottom-0 left-0 w-full text-center text-yellow-400 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out">
                 Accès aux films
               </div>
@@ -83,20 +87,47 @@ const Profiles = ({ session, movies }: ProfileProps) => {
                 {!session?.user || !session?.user?.image ? (<img src="/img/avatars-kings.png" alt="avatar test" />)
                   : (<img src={session?.user?.image} alt="image test" />)}
               </div>
-              <div className="mt-4 text-gray-400
-                          text-2xl text-center
-                          group-hover:text-white">
-                {session?.user?.name}
-              </div>
+              
               <div className="absolute bottom-0 left-0 w-full text-center text-violet-600 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out">
                 Votre Dashboard
               </div>
             </div>
           </div>
+          <div onClick={() => { router.push('/') }}>
+            <div className="group flex-row w-44 mx-auto relative">
+              <div className="w-44 h-44 rounded-md
+                          flex items-center justify-center
+                          border-4 border-transparent
+                          group-hover:cursor-pointer
+                          group-hover:border-pink-500
+                          overflow-hidden hover:ease-in duration-300">
+                <img src="/img/future404.png" alt="the future 404 radio game" />    
+              </div>
+              
+              <div className="absolute bottom-0 left-0 w-full text-center text-pink-500 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out">
+                Jeu à venir
+              </div>
+            </div>
+          </div>
         </div>
+
+         {/* Affichage des films favoris */}
+         <div className="mt-10 text-center mb-16">
+          <h2 className="text-2xl text-white">Vos films favoris</h2>
+          {movies && movies.length > 0 ? (
+            <Favorites movies={movies} />
+          ) : (
+            <h2 className="text-lg text-yellow-400">(Vous n'avez pas encore de films préférés enregistrés)</h2>
+          )}
+        </div>
+
+
         {/* Condition pour vérifier si l'utilisateur est premium ou non */}
-        {session?.user?.isPremium ? (
-          <Subway />
+        {session?.user?.isPremium === false ? (
+          <div className="mt-12 subway-container">
+            <h3 className="text-center text-2xl text-white font-earl tracking-widest">Entrez dans le subway, vous avez l'accès spécial</h3>
+            <Subway />
+          </div>
         ) : (
           <Link href="/premium">
             <div className="mt-10 text-white text-xl gotopremiumsub
@@ -109,19 +140,7 @@ const Profiles = ({ session, movies }: ProfileProps) => {
             </div>
           </Link>
         )}
-        {/* Affichage des films favoris */}
-        <div className="mt-10 text-center mb-32">
-          <h2 className="text-2xl text-white">Vos films favoris</h2>
-          {movies && movies.length > 0 ? (
-            <ul>
-              {movies.map((movie) => (
-                <li key={movie.id}>{movie.title}</li>
-              ))}
-            </ul>
-          ) : (
-            <h2 className="text-lg text-yellow-400">(Vous n'avez pas encore de films préférés enregistrés)</h2>
-          )}
-        </div>
+        
       </div>
     </div>
   );

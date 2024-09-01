@@ -12,11 +12,10 @@ import { CustomSession } from '@/lib/types';
 const TOP_OFFSET = 66;
 
 interface NavProps {
-    session: CustomSession | null; 
+    session: CustomSession | null;
 }
 
-
-const Navbar : React.FC<NavProps>= ({session}) => {
+const Navbar: React.FC<NavProps> = ({ session }) => {
     const [showMobileMenu, setShowMobileMenu] = useState(false);
     const [showAccountMenu, setShowAccountMenu] = useState(false);
     const [showLangMenu, setShowLangMenu] = useState(false);
@@ -35,25 +34,22 @@ const Navbar : React.FC<NavProps>= ({session}) => {
     }, []);
 
     const toggleLangMenu = useCallback(() => {
-        
         setShowLangMenu((current) => !current);
     }, []);
-    
 
-    const handleCloseAccountMenu = useCallback((e:MouseEvent) => {
+    const handleCloseAccountMenu = useCallback((e: MouseEvent) => {
         if (accountMenuRef.current && !accountMenuRef.current.contains(e.target as Node) && e.target !== accountMenuRef.current) {
             setShowAccountMenu(false);
         }
         e.stopPropagation();
     }, []);
-    
-    const handleCloseLangMenu = useCallback((e:MouseEvent) => {
+
+    const handleCloseLangMenu = useCallback((e: MouseEvent) => {
         if (languagesMenuRef.current && !languagesMenuRef.current.contains(e.target as Node) && e.target !== languagesMenuRef.current) {
             setShowLangMenu(false);
         }
         e.stopPropagation();
     }, []);
-    
 
     useEffect(() => {
         const handleScroll = () => {
@@ -71,18 +67,18 @@ const Navbar : React.FC<NavProps>= ({session}) => {
     }, []);
 
     useEffect(() => {
-        document.addEventListener('mouseup', handleCloseLangMenu); // Ajouté
-        return () => { 
-            document.removeEventListener('mouseup', handleCloseLangMenu); // Ajouté
+        document.addEventListener('mouseup', handleCloseLangMenu);
+        return () => {
+            document.removeEventListener('mouseup', handleCloseLangMenu);
         };
-    }, [ handleCloseLangMenu]); // Ajouté
+    }, [handleCloseLangMenu]);
 
     useEffect(() => {
-        document.addEventListener('mouseup', handleCloseAccountMenu); 
+        document.addEventListener('mouseup', handleCloseAccountMenu);
         return () => {
-            document.removeEventListener('mouseup', handleCloseAccountMenu);      
+            document.removeEventListener('mouseup', handleCloseAccountMenu);
         };
-    }, [handleCloseAccountMenu]); // Ajouté
+    }, [handleCloseAccountMenu]);
 
     const handleRandomizerClick = useCallback(() => {
         if (randomMovie) {
@@ -95,13 +91,13 @@ const Navbar : React.FC<NavProps>= ({session}) => {
             <div
                 className={`
                     py-2
-                    px-4 
-                    md:px-16  
-                    flex 
-                    flex-row 
+                    px-4
+                    md:px-16
+                    flex
+                    flex-row
                     items-center
                     transition
-                    duration-500 
+                    duration-500
                     ${showBackground ? 'bg-zinc-900 bg-opacity-90' : ''}
                 `}
             >
@@ -114,13 +110,12 @@ const Navbar : React.FC<NavProps>= ({session}) => {
                     <Link href="/"><NavbarItem label="Home" /></Link>
                     <Link href="/series"><NavbarItem label="Series" /></Link>
                     <Link href="/films"><NavbarItem label="Films" /></Link>
-                    <Link href="/series"><NavbarItem label="New" /></Link>
+                    <Link href="/new"><NavbarItem label="New" /></Link>
                     <Link href="/profiles"><NavbarItem label="Yours" /></Link>
                     <div onClick={toggleLangMenu} className="flex flex-row items-center gap-2 cursor-pointer relative">
                         <NavbarItem label="Change Language" />
-                        
                         <div ref={languagesMenuRef} className="absolute top-full left-0">
-                            <Languages visible={showLangMenu} onClose={e=>toggleLangMenu} />
+                            <Languages visible={showLangMenu} onClose={e => toggleLangMenu} />
                         </div>
                     </div>
                     <div onClick={handleRandomizerClick} className="relative">
@@ -139,15 +134,16 @@ const Navbar : React.FC<NavProps>= ({session}) => {
                         <BsBell />
                     </div>
                     <div className="flex flex-row items-center gap-2 cursor-pointer relative">
-                    <div onClick={(e) => { toggleAccountMenu(); e.stopPropagation(); }} className="flex flex-row items-center gap-2">
+                        <div onClick={(e) => { toggleAccountMenu(); e.stopPropagation(); }} className="flex flex-row items-center gap-2">
                             <div className="w-6 h-6 lg:w-10 lg:h-10 rounded-md overflow-hidden">
-                            { user?.image ? (<img  src={user.image} alt="profile mini image" />)
-                    : ( <img src="/img/csp3.png" alt="avatar test" />) } 
-                               
+                                {user?.image ? (
+                                    <img src={user.image} alt="profile mini image" />
+                                ) : (
+                                    <img src="/img/csp3.png" alt="avatar test" />
+                                )}
                             </div>
                             <BsChevronDown className={`text-white transition ${showAccountMenu ? '-rotate-90' : 'rotate-0'}`} />
                         </div>
-
                         <div ref={accountMenuRef} onMouseDown={e => e.stopPropagation()}>
                             <AccountMenu visible={showAccountMenu} session={session} />
                         </div>

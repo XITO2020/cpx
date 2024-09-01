@@ -1,0 +1,106 @@
+
+
+.placeholder-dark::placeholder {
+    color: #0a0a0a; 
+  }
+  
+  .placeholder-light::placeholder {
+    color: #ffffff; 
+  }
+  
+  .inputfield{
+    font-size: 20px;
+    font-weight:600;
+    outline:black 2px solid;
+    width:60%;
+    margin:10px auto;
+    transition: 800ms;
+    &:hover{
+      width:100%;
+      outline:none;
+    }
+    &.shadowteal {
+      &:hover {
+        box-shadow: 0px 0px 20px  #14b8a6;
+        ; 
+      }
+    }
+    &.shadowblue {
+      &:hover {
+        box-shadow: 0px 0px 20px  #1d4ed8;
+        ; 
+      }
+    }
+    &.shadowindigo {
+      &:hover {
+        box-shadow: 0px 0px 20px  #4338ca;
+        ; 
+      }
+    }
+    &.shadowviolet {
+      &:hover {
+        box-shadow: 0px 0px 20px #5b21b6; 
+      }
+    }
+    &.shadowpurple {
+      &:hover {
+        box-shadow: 0px 0px 20px #9333ea; 
+      }
+    }
+               
+    &.shadowfuchsia {
+      &:hover {
+        box-shadow: 0px 0px 20px #c026d3; 
+      }
+    }
+    &.shadowyellow {
+      &:hover {
+        box-shadow: 0px 0px 20px #f3e016;
+      }
+    }
+    &.shadowrose {
+      &:hover {
+        box-shadow: 0px 0px 20px #f43f5e; 
+      }
+    }
+    &.shadowpink {
+      &:hover {
+        box-shadow: 0px 0px 20px #db2777; 
+      }
+    }
+  }
+
+.shadowlight {
+  &:hover {
+    box-shadow: 0px 2px 25px #dfdfdf; 
+  }
+}
+    
+.design{
+  width:300px;
+  height:300px;
+  position:absolute;
+  top:1529px;
+  left:1369px;
+  z-index:8;
+}
+
+.adflex{
+  width:100%;
+  margin:15px 30px;
+  padding:10px 10px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  & div{
+    width:15%;
+    height:200px;
+    background:linear-gradient((rgb(1,80,80)) ,(rgb(1, 20, 5)));
+  }
+}
+
+.dashboardnav{
+  border-bottom: (rgb(30,30,30)) solid 4px;
+  transition:ease-in 1s;
+
+}

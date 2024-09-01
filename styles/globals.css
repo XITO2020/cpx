@@ -366,6 +366,43 @@ display: none !important;
   box-shadow:1px 1px 15px #f40e50;
 }
 
+.favorites-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .favorites-grid {
+    grid-template-columns: repeat(4, 1fr);
+    width: 80%;
+  }
+}
+
+@media (min-width: 1024px) {
+  .favorites-grid {
+    grid-template-columns: repeat(5, 1fr);
+    width: 70%;
+  }
+}
+
+.favorite-item {
+  text-align: center;
+}
+
+.favorite-thumbnail {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.favorite-title {
+  margin-top: 8px;
+  font-size: 16px;
+  color: #fff;
+}
+
 
 @media screen and (max-width: 600px) { /* Taille d'écran pour les téléphones */
   .video-grid {
@@ -518,3 +555,98 @@ display: none !important;
 
       
    }
+
+   @keyframes fadeIn {
+    0% {
+      background: rgb(24 24 27);
+    }
+    20% {
+      background: rgb(56, 5, 77);
+    }
+    40% {
+      background: lightpink;
+    }
+    60% {
+      background: peachpuff;
+    }
+    80% {
+      background: lemonchiffon;
+    }
+    99% {
+      background: turquoise;
+    }
+    100% {
+      background: radial-gradient(ellipse at top, #abfced, transparent),
+                radial-gradient(ellipse at bottom, #4d9, turquoise);
+    }
+  }
+  
+  .newbackground {
+    background: radial-gradient(ellipse at top, #abfced, transparent),
+                radial-gradient(ellipse at bottom, #4d9, turquoise);
+    position: relative;
+    padding-bottom: 50px;
+    animation: fadeIn 30s ease-in-out;
+  }
+  
+
+  .edito{
+    position:relative;
+    top:200px;
+    min-height:60vh;
+    margin:20px auto;
+    width:77%;
+    color: #0a0e0c;
+    display:grid;
+    grid-template-columns:25% 25% 25% 25%;
+    grid-template-rows: 50% 50%;
+    margin-bottom:8;
+    gap:10px;
+  }
+
+  .sorties{
+    grid-column: 1/ span 2; 
+    grid-row: 1/ span 4;
+    border-radius:10px;
+    border-radius:5px;
+  }
+  .news-container{
+    grid-column: 3 / span 2; 
+    grid-row:  span 2;
+    display:flex;
+    flex-direction: row;
+    gap:10px;
+  }
+  .news{
+    width: 90%;
+    
+    justify-content: space-between;
+    border-radius:10px;
+  }
+
+  .favorites-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px; 
+    padding: 16px; 
+  }
+  
+  .favorite-item {
+    border-radius: 8px;
+    overflow: hidden;
+    background:url('/img/filmroll_0.jpg');
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+  }
+  
+  .favorite-thumbnail {
+    width: 100%;
+    aspect-ratio: 1 / 1; 
+    object-fit: cover; 
+  }
+  
+  .favorite-title {
+    padding: 8px; 
+    font-size: 14px; 
+    text-align: center; 
+  }
+  

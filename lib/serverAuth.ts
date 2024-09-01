@@ -38,7 +38,7 @@ const serverAuth = async (req: NextApiRequest, res: NextApiResponse): Promise<{ 
     // Créer une instance de CustomSession avec l'utilisateur trouvé
     const customSession: CustomSession = {
       ...session,
-      user: currentUser // Assurez-vous que currentUser a la propriété 'name'
+      admin: currentUser.admin, 
     };
 
     return { customSession }; // Retourner l'instance de CustomSession

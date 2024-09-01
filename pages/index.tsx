@@ -19,6 +19,7 @@ const LazyMovieList = lazy(() => import('@/components/MovieList'));
 type Props = {
   session: CustomSession | null;
   movies: Movie[] | null;
+  moviesByGenre: { [key: string]: Movie[] };
 };
 
 export const getServerSideProps: GetServerSideProps<Props> = async (context) => {
@@ -29,6 +30,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context) => 
       props: {
         session: null,
         movies: null,
+        moviesByGenre: {},
       },
     };
   }
@@ -39,7 +41,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context) => 
 
   const movies = await prismadb.movie.findMany();
 
-    const moviesByGenre = movies.reduce((acc: { [key: string]: Movie[] }, movie: Movie) => {
+  const moviesByGenre = movies.reduce((acc: { [key: string]: Movie[] }, movie: Movie) => {
     if (!acc[movie.genre]) {
       acc[movie.genre] = [];
     }
@@ -47,26 +49,27 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context) => 
     return acc;
   }, {});
 
-   // Exclure la propriété `emailVerified` de l'objet `session.user`
-   const { emailVerified, ...userWithoutEmailVerified } = session.user;
+  // Exclure la propriété `emailVerified` de l'objet `session.user`
+  const { emailVerified, ...userWithoutEmailVerified } = session.user;
 
-   return {
-     props: {
-       session: { ...session, user: userWithoutEmailVerified } as CustomSession,
-       movies,
-     },
-   };
- };
+  return {
+    props: {
+      session: { ...session, user: userWithoutEmailVerified } as CustomSession,
+      movies,
+      moviesByGenre,
+    },
+  };
+};
 
-const HomePage: React.FC<Props> = ({ session, movies }) => {
-  const { data: movieList = movies || [] } = useMovieList() as { data: Movie[] }; 
+const HomePage: React.FC<Props> = ({ session, movies, moviesByGenre }) => {
+  const { data: movieList = movies || [] } = useMovieList() as { data: Movie[] };
   const favorites = useFavorites();
-  const { isOpen, closeModal } = useInfoModal(); 
+  const { isOpen, closeModal } = useInfoModal();
 
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [loadedMovieLists, setLoadedMovieLists] = useState<Movie[]>([]);
-  
+
   const loadMore = () => {
     const itemsPerPage = 10;
     const startIndex = (page - 1) * itemsPerPage;
@@ -80,8 +83,8 @@ const HomePage: React.FC<Props> = ({ session, movies }) => {
     }
   };
 
-  const alertMovies = movies?.filter(movie => movie.genre === "alert-launchers") || [];
-  const nasaMovies = movies?.filter(movie => movie.genre === "nasa") || [];
+  const alertMovies = moviesByGenre["alert-launchers"] || [];
+  const nasaMovies = moviesByGenre["nasa"] || [];
   const hightechMovies = movies?.filter(movie => movie.genre === "50-5G&tech") || [];
   const grapheneMovies = movies?.filter(movie => movie.genre === "oxydedegraphene") || [];
   const surviveMovies = movies?.filter(movie => movie.genre === "46-survivalisme") || [];
@@ -109,14 +112,17 @@ const HomePage: React.FC<Props> = ({ session, movies }) => {
   const fmMovies = movies?.filter(movie => movie.genre === "FM+MK") || [];
   const realityMovies = movies?.filter(movie => movie.genre === "realityis") || [];
   const idiotsMovies = movies?.filter(movie => movie.genre === "usefull idiots & agents smith") || [];
-  
+
+  console.log('Alert Movies:', beingMovies); // Ajoutez ce log pour vérifier les films
+  console.log('Nasa Movies:', nasaMovies); // Ajoutez ce log pour vérifier les films
+
   return (
     <>
       <div className="fond">
         <Navbar session={session} />
         <Billboard />
         {!session && <GridThumbnails /> }
-        <div>
+      <div>
           <InfiniteScroll className="fond-infinite"
             dataLength={loadedMovieLists.length}
             next={loadMore}
@@ -137,7 +143,7 @@ const HomePage: React.FC<Props> = ({ session, movies }) => {
             <MovieList title="Afrika CORP" data={afrikaMovies} />
             <MovieList title="Projects cachés jusque maintenant" data={hiddenprojectsnowMovies} />
             <MovieList title="Hoaxes dans l'Histoire jusqu'au mytho climatique" data={HHMovies} />
-            
+
             {loadedMovieLists.map((movie, index) => (
               <Suspense key={movie.id} fallback={<div>Loading MovieList...</div>}>
                 <LazyMovieList title={movie.title} data={[movie]} session={session || undefined} />
@@ -150,7 +156,7 @@ const HomePage: React.FC<Props> = ({ session, movies }) => {
       {isOpen && (
         <div className="fixed top-0 left-0 w-full h-full z-50" onClick={closeModal} />
       )}
-      
+
       <div className={`fixed top-0 left-0 w-full h-full z-50 ${isOpen ? '' : 'pointer-events-none'}`}>
         <InfoModal visible={isOpen} onClose={closeModal} />
       </div>

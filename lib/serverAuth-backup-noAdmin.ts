@@ -6,7 +6,8 @@ import { authOptions } from "@/pages/api/auth/[...nextauth]";
 
 /**
  * Fonction utilisée pour authentifier les utilisateurs sur le serveur.
- * Récupère les informations de session et cherche l'utilisateur correspondant dans la base de données.
+ * Récupère les informations de session PLUS D AUTRE DE LA BDD si je veux, car
+ * elle cherche l'utilisateur correspondant dans la base de données.
  */
 const serverAuth = async (req: NextApiRequest, res: NextApiResponse): Promise<{ customSession: CustomSession }> => {
   try {
@@ -33,7 +34,10 @@ const serverAuth = async (req: NextApiRequest, res: NextApiResponse): Promise<{ 
     // Créer une instance de CustomSession avec l'utilisateur trouvé
     const customSession: CustomSession = {
       ...session,
-      user: currentUser // Assurez-vous que currentUser a la propriété 'name'
+      user: {
+        ...currentUser,
+        admin: currentUser.admin, // ça e été une galère ici, il fallait s assurer que la proprété admin était incluse dans user
+      }
     };
 
     return { customSession }; // Retourner l'instance de CustomSession

@@ -3,6 +3,9 @@ import type { Session as NextAuthSession } from 'next-auth';
 export interface CustomSession extends Omit<NextAuthSession, 'user'> {
   user: User;
   expires: string;
+  admin : boolean;
+  email: string;
+  emailVerified: boolean;
 };
 
 export type User = {

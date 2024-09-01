@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import React from 'react'
-import { LinkedArticle } from '../../lib/types';
+import { LinkedArticle } from '../../../lib/types';
 
 const Comments = () => {
   return (

@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import serverAuth from '@/lib/serverAuth-backup-noAdmin'
+import serverAuth from '@/lib/serverAuth'
 
 /**
 current.ts est un gestionnaire API qui utilise

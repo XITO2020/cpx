@@ -6,28 +6,24 @@ export default async function searchHandler(req: NextApiRequest, res: NextApiRes
         return res.status(405).end();
     }
 
-    const { title, year, genre, rating, description } = req.query;
+    const { query } = req.query;
 
     const movieConditions: any = {};
     const articleConditions: any = {};
+    const authorConditions: any = {};
 
-    if (title) {
-        movieConditions.title = { contains: title as string, mode: 'insensitive' };
-        articleConditions.title = { contains: title as string, mode: 'insensitive' };
-    }
-    if (year) movieConditions.year = Number(year);
-    if (genre) movieConditions.genre = { contains: genre as string, mode: 'insensitive' };
-    if (rating) movieConditions.rating = { gte: Number(rating) };
-    if (description) {
-        movieConditions.description = { contains: description as string, mode: 'insensitive' };
-        articleConditions.description = { contains: description as string, mode: 'insensitive' };
+    if (query) {
+        movieConditions.title = { contains: query as string, mode: 'insensitive' };
+        articleConditions.title = { contains: query as string, mode: 'insensitive' };
+        authorConditions.name = { contains: query as string, mode: 'insensitive' };
     }
 
     try {
         const movies = await prisma.movie.findMany({ where: movieConditions });
         const articles = await prisma.linkedArticle.findMany({ where: articleConditions });
+        const authors = await prisma.author.findMany({ where: authorConditions });
 
-        res.status(200).json({ movies, articles });
+        res.status(200).json({ movies, articles, authors });
     } catch (error) {
         res.status(500).json({ error: 'Something went wrong' });
     }

@@ -2,7 +2,7 @@ import React from 'react';
 import styles from "./blog.module.css";
 import MainArticle from './article/MainArticle';
 import ThumbArticle from './thumbArticle/ThumbArticle';
-import Comments from './Comments';
+import Comments from './comments/Comments';
 import { CustomSession, Movie, LinkedArticle } from '@/lib/types';
 import Image from 'next/image';
 
@@ -11,18 +11,19 @@ interface BlogProps {
   session: CustomSession | null;
   movies: Movie[] | null;
   articles: LinkedArticle[] | null;
+  page: string;
 }
 
-const Blog: React.FC<BlogProps> = ({ movie, session, movies, articles }) => {
+const Blog: React.FC<BlogProps> = ({ movie, session, movies, articles, page }) => {
 
   return (
-    <div className={styles.container}>
+    <div className={`${page === 'movieId' ? `${styles.tapisvert} ${styles.container}` : `${styles.tapiscyan}`}`}>
       <div className="flex justify-between px-12 items-center h-16">
         <Image src="/img/conspix/popcorn.png" alt="image d'habillage" height={100} width={200} />
         <h1 className="text-red-500 text-bold text-2xl">
           {movie?.title}
         </h1>
-        <h2 className="text-4xl text-stone-100 text-extrabold subway white">Le Blog</h2>
+        <h2 className="text-4xl text-extrabold subway white">Le Blog</h2>
       </div>
       
       
@@ -40,7 +41,7 @@ const Blog: React.FC<BlogProps> = ({ movie, session, movies, articles }) => {
                 <ThumbArticle />               
                 <ThumbArticle />               
             </div>
-
+            <Comments />
       </section>
       <section className={styles.comments}>
 

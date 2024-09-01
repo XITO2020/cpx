@@ -1,12 +1,33 @@
+.tapisvert{
+    background:linear-gradient(black , rgb(5, 33, 5),rgb(4, 31, 4)) !important;
+    width:80%;
+    margin:0 auto;
+    border-radius:10px;
+    color:#cfcfcf;
+}
+.tapisrouge{
+    background:linear-gradient(rgb(65, 1, 32),#771234 ,tomato) !important;
+}
+.tapiscyan{
+    background:#aafcfe;
+    width:80%;
+    padding:16px;
+    margin:0 auto;
+    border-radius:10px;
+    color:black;
+    font-weight:500;
+}
+
 .container{
     min-height:80vh;
     max-width:80%;
-    background:linear-gradient(black , rgb(5, 33, 5),rgb(4, 61, 4)) !important;
     margin:30px auto;
     border-radius:3px;
     padding:20px;
     transition:2s ease-in-out;
 }
+
+
 .container:hover{
     background:radial-gradient(ellipse at top,rgba(203, 228, 250, 0.594),rgba(98, 133, 147, 0.712) 75%, transparent),
                radial-gradient(ellipse at bottom, royalblue, transparent,cadetblue) ;

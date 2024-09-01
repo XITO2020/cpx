@@ -15,31 +15,47 @@ interface WatchProps {
     session: CustomSession | null;
     movies: Movie[] | null;
     articles: LinkedArticle[] | null;
-  }
+}
 
-
-
-  const Watch: React.FC<WatchProps> = ({ session, movies, articles }) => {
+const Watch: React.FC<WatchProps> = ({ session, movies, articles }) => {
     const router = useRouter();
     const [currentMovieId, setCurrentMovieId] = useState<string | undefined>();
+    const [currentMovieIndex, setCurrentMovieIndex] = useState<number>(0);
+    const [filteredMovies, setFilteredMovies] = useState<Movie[]>([]);
 
     useEffect(() => {
         if (router.isReady && router.query.movieId) {
-            console.log ("router.query.movieId: " , router.query.movieId)
             setCurrentMovieId(router.query.movieId as string);
         }
     }, [router.isReady, router.query]);
 
-    const { data, error, isLoading } = useMovie(currentMovieId);
-    console.log("Current Movie ID:", currentMovieId);
-    console.log("Video URL to be loaded nommée data.videoUrl:", data?.videoUrl);
+    useEffect(() => {
+        if (movies && currentMovieId) {
+            const currentMovie = movies.find(movie => movie.id === currentMovieId);
+            if (currentMovie) {
+                const sameCategoryMovies = movies.filter(movie => movie.genre === currentMovie.genre);
+                setFilteredMovies(sameCategoryMovies);
+                setCurrentMovieIndex(sameCategoryMovies.findIndex(movie => movie.id === currentMovieId));
+            }
+        }
+    }, [movies, currentMovieId]);
 
+    const { data, error, isLoading } = useMovie(currentMovieId);
+
+    const handleNextMovie = () => {
+        if (filteredMovies.length > 0) {
+            const nextIndex = (currentMovieIndex + 1) % filteredMovies.length;
+            setCurrentMovieIndex(nextIndex);
+            setCurrentMovieId(filteredMovies[nextIndex].id);
+            router.push(`/watch/${filteredMovies[nextIndex].id}`, undefined, { shallow: true });
+        }
+    };
 
     return (
         <div className="bg-black">
             <nav className="fixed w-full p-4 z-10 flex items-center gap-8 bg-black bg-opacity-70 justify-between mb-20">
                 <div className="flex flex-row items-center">
-                    <AiOutlineArrowLeft className="text-white cursor-pointer" size={40}
+                    <AiOutlineArrowLeft className="text-white cursor-pointer hover:text-violet-400" size={40}
                     onClick={() => { router.push('/') }}
                     />
 
@@ -49,27 +65,27 @@ interface WatchProps {
                         </span> {data?.title}
                     </p>
 
-                    <AiOutlineArrowRight className="text-white" size={40} />
+                    <AiOutlineArrowRight className="text-white cursor-pointer hover:text-rose-500" size={40} onClick={handleNextMovie} />
+                    
+                </div>
 
-                </div>   
-                
                 <Search />
             </nav>
 
             <main className="video-grid mt-20">
 
                 <div className="video-player mt-20">
-                {data?.isLoading && <p>Chargement...</p>}
-                {data?.error && <p>Erreur lors du chargement : {data.error.message}</p>}
+                {isLoading && <p>Chargement...</p>}
+                {error && <p>Erreur lors du chargement : {error.message}</p>}
                 {data?.videoUrl && (
                     <>
-                        <ReactPlayer 
+                        <ReactPlayer
                             className="w-full h-full"
-                            url={`/${data.videoUrl}`} 
+                            url={`/${data.videoUrl}`}
                             controls
                             onError={() => alert("Erreur lors de la lecture de la vidéo.")}
                         />
-                        
+
                     </>
                 )}
                 </div>
@@ -82,37 +98,37 @@ interface WatchProps {
                         <button>sound</button>
                         <button>subtitles</button>
                     </div>
-                    
+
                 </div>
-                <div className="sidebar-item rating  opacity-30 hover:opacity-100 bg-yellow-400">
+                <div className="sidebar-item rating opacity-30 hover:opacity-100 bg-yellow-400">
                     rating
                     * * * * * Stars
                     <p>note global : 10/10</p>
                 </div>
-                <div className="sidebar-item addcomment  opacity-30 hover:opacity-100 bg-violet-800">
+                <div className="sidebar-item addcomment opacity-30 hover:opacity-100 bg-violet-800">
                 <div className="comments">
                             <Comments movieId ={currentMovieId || ""} />
                         </div>
                 </div>
-                <div className="sidebar-item randomize  opacity-30 hover:opacity-100 bg-rose-600">
+                <div className="sidebar-item randomize opacity-30 hover:opacity-100 bg-rose-600">
                     randomize
                         +
                     bonus premium
                 </div>
-            
+
             </main>
 
             <section>
-                <Blog movie={data} movies={movies} articles={articles} session={session}/>
+                <Blog movie={data} movies={movies} articles={articles} session={session} page="movieId" />
             </section>
-        
+
         </div>
     )
 }
 
 export const getServerSideProps = async (context: any) => {
     const session = await getSession(context);
-  
+
     if (!session) {
       return {
         redirect: {
@@ -121,10 +137,10 @@ export const getServerSideProps = async (context: any) => {
         },
       };
     }
-  
+
     const movies = await prismadb.movie.findMany();
     const articles = await prismadb.linkedArticle.findMany();
-  
+
     return {
       props: {
         session,
@@ -133,8 +149,5 @@ export const getServerSideProps = async (context: any) => {
       },
     };
   };
-  
-
 
 export default Watch;
- 

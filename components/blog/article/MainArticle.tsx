@@ -16,7 +16,7 @@ const MainArticle: React.FC<ArticleProps> = ({movie, article, articles}) => {
   const { data, error, isLoading } = useMovie(currentMovieId);
   return (
     <div className={styles.container}>
-      <section className="flex justify-between w-full text-white">
+      <section className="flex justify-between w-full">
         <div className="">
           <p>Author :</p>
           <p>{article?.user.name}</p>

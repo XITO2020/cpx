@@ -4,15 +4,18 @@ import Navbar from '@/components/Navbar';
 import { CustomSession, Movie } from "@/lib/types";
 import { authOptions } from './api/auth/[...nextauth]';
 import prismadb from '@/lib/prismadb'; //
+import { useRouter } from 'next/navigation';
+import FAQ from '@/components/Faq';
+
 
 type ContactProps = {
   session: CustomSession | null;
   movies: Movie[] | null;
 };
 
-export const getServerSideProps: GetServerSideProps<ProfileProps> = async (context) => {
-  const session = await getServerSession(context.req, context.res, authOptions);
 
+export const getServerSideProps: GetServerSideProps<ContactProps> = async (context) => {
+  const session = await getServerSession(context.req, context.res, authOptions);
   if (!session || !session.user || !session.user.email) {
     return {
       props: {
@@ -30,6 +33,7 @@ export const getServerSideProps: GetServerSideProps<ProfileProps> = async (conte
   });
 
   const movies = user?.favoriteMovies || [];
+  
 
   return {
     props: {
@@ -41,16 +45,36 @@ export const getServerSideProps: GetServerSideProps<ProfileProps> = async (conte
 
 
 export default function contact ({ session, movies }: ContactProps) {
+
+  const router = useRouter();
+
     return (
-        <>
-            <Navbar />
-            <div className="w-full min-h-screen bg-amber-700 px-16 py-24">
+          <>
+            <Navbar session={session} />
+            <div className="w-full min-h-screen bg-gradient-to-r from-amber-900 to-black px-16 py-24 text-stone-400">
                 <h1>Contact...</h1>
-                link to f-society
-                use vpn...
-                send mail to this temporarymail with a temporary mail
+                
+                <h2>use vpn... send mail to this temporarymail with a temporary mail</h2>
+                <h2>Mettre votre publicité dans le site</h2>
+                <h2>Vous êtes une association</h2>
+      
+                <h2>Acheter plus de NFT</h2>
+                <h2>Devenir modérateur</h2>
+                <h2>Demander un service numérique</h2>
+                <h2>Nous soutenir financièrement</h2>
+                <h2>Soumettre une catégorie de film</h2>
+                <h2>Aider au développement de jeux en ligne (javascript python)</h2>
+
+                <div className="faq tex-black">
+                  <h2>FAQ</h2>
+                  <FAQ />
+                </div>
             </div>
-            <div className="flex items-center justify-center gap-8 mt-10">
+
+            
+
+
+            <div className="flex items-center justify-center gap-8 mt-2 mb-10">
           <div onClick={() => { router.push('/') }}>
             <div className="group flex-row w-44 mx-auto relative">
               <div className="w-44 h-44 rounded-md
@@ -62,17 +86,13 @@ export default function contact ({ session, movies }: ContactProps) {
                 {!session?.user || !session?.user?.image ? (<img src="/img/mickaelbroughtsome.png" alt="avatar test" />)
                   : (<img src={session?.user?.image} alt="image test" />)}
               </div>
-              <div className="mt-4 text-gray-400
-                          text-2xl text-center
-                          group-hover:text-white">
-                {session?.user?.name}
-              </div>
+              
               <div className="absolute bottom-0 left-0 w-full text-center text-yellow-400 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out">
                 Accès aux films
               </div>
             </div>
           </div>
-          <div onClick={() => { router.push('/admin/dashboard') }}>
+          <div onClick={() => {session?.user?.isPremium ? router.push('/new') : router.push('/premium') }}>
             <div className="group flex-row w-44 mx-auto relative">
               <div className="w-44 h-44 rounded-md
                           flex items-center justify-center
@@ -83,11 +103,7 @@ export default function contact ({ session, movies }: ContactProps) {
                 {!session?.user || !session?.user?.image ? (<img src="/img/cinema.png" alt="avatar test" />)
                   : (<img src={session?.user?.image} alt="image test" />)}
               </div>
-              <div className="mt-4 text-gray-400
-                          text-2xl text-center
-                          group-hover:text-white">
-                {session?.user?.name}
-              </div>
+              
               <div className="absolute bottom-0 left-0 w-full text-center text-violet-600 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out">
                 Sélection Premium
               </div>

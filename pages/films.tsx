@@ -2,8 +2,49 @@ import Navbar from '@/components/Navbar';
 import React, {useState, useEffect} from "react";
 import GridMovies from "@/components/GridMovies";
 import Billboard from "@/components/Billboard";
+import { GetServerSideProps, NextPageContext } from 'next';
+import { getServerSession } from 'next-auth';
+import { CustomSession, Movie } from "@/lib/types";
+import { authOptions } from './api/auth/[...nextauth]';
+import prismadb from '@/lib/prismadb'; //
 
-export default function series () {
+type NavbarProps = {
+    session: CustomSession | null;
+    movies: Movie[] | null;
+  };
+  
+  
+  export const getServerSideProps: GetServerSideProps<NavbarProps> = async (context) => {
+    const session = await getServerSession(context.req, context.res, authOptions);
+    if (!session || !session.user || !session.user.email) {
+      return {
+        props: {
+          session: null,
+          movies: null,
+        },
+      };
+    }
+  
+    const user = await prismadb.user.findUnique({
+      where: { email: session.user.email },
+      include: {
+        favoriteMovies: true,
+      },
+    });
+  
+    const movies = user?.favoriteMovies || [];
+    
+  
+    return {
+      props: {
+        session,
+        movies,
+      },
+    };
+  };
+  
+
+export default function films ({ session, movies }: NavbarProps) {
     const [isMuted, setIsMuted] = useState(true);
 
     useEffect(() => {
@@ -17,9 +58,9 @@ export default function series () {
     }, [isMuted]);
     return (
         <>
-            <Navbar />
+            <Navbar session={session} />
             <section className="cinema">
-                <h1>film</h1>
+                
                 <div id="mainscreen">
                     <iframe 
                         width="800" 

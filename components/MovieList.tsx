@@ -38,7 +38,7 @@ const MovieList: React.FC<MovieListProps> = ({ data, session, title }) => {
 
     return (
         <div className={`movie-list px-4 py-8 pb-12 md:px-12 mt-4 space-y-8 relative overflow-visible 
-        hover:overflow-visible hover:bg-opacity-30 hover:z-50
+        hover:overflow-visible  hover:z-50 bg-gradient-to-r from-violet-400 to-pink-300
         hover:ring-offset-8 hover:ease-in duration-1000`}>
             <div className="flex flex-w w-full justify-between">
                 <p className="text-white text-md md:text-2xl lg:text-2xl font-semibold mb-4 title-slide">
