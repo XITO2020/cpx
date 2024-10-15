@@ -1,4 +1,4 @@
-const MongoClient = require('mongodb').MongoClient;
+const MongoClient = require('postgreSql').MongoClient;
 
 async function updateAllMoviesToFalse() {
   const uri = 'mongodb://127.0.0.1:27017/conspix'; // Remplacez par l'URI de votre base de données MongoDB

@@ -14,6 +14,10 @@ import useMovieList from "@/hooks/useMovieList";
 import { Movie, CustomSession } from '@/lib/types';
 import GridThumbnails from '@/components/GridThumbnails';
 
+interface MoviesByGenre {
+  [key: string]: Movie[];
+}
+
 const LazyMovieList = lazy(() => import('@/components/MovieList'));
 
 type Props = {
@@ -39,18 +43,38 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context) => 
     where: { email: session.user.email },
   });
 
-  const movies = await prismadb.movie.findMany();
+  const movies = await prismadb.movie.findMany({
+    include: {
+      movieGenres: {
+        include: {
+          genre: {
+            select: {
+              id: true,
+              name: true,
+            }, 
+          },
+        },
+      },
+    },
+  });
+  console.log('Données de films récupérées de la base de données :', movies);
+  
 
   const moviesByGenre = movies.reduce((acc: { [key: string]: Movie[] }, movie: Movie) => {
-    if (!acc[movie.genre]) {
-      acc[movie.genre] = [];
+    if (movie.movieGenres) {
+      movie.movieGenres.forEach((movieGenre) => {
+        const genre = movieGenre.genre;
+        if (!acc[genre.name]) {
+          acc[genre.name] = [];
+        }
+        acc[genre.name].push(movie);
+      });
     }
-    acc[movie.genre].push(movie);
     return acc;
-  }, {});
+  }, {});  
 
   // Exclure la propriété `emailVerified` de l'objet `session.user`
-  const { emailVerified, ...userWithoutEmailVerified } = session.user;
+  const { emailVerified, ...userWithoutEmailVerified} = session.user;
 
   return {
     props: {
@@ -61,8 +85,8 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context) => 
   };
 };
 
-const HomePage: React.FC<Props> = ({ session, movies, moviesByGenre }) => {
-  const { data: movieList = movies || [] } = useMovieList() as { data: Movie[] };
+const HomePage: React.FC<Props> = ({ session, movies = [], moviesByGenre = {} }) => {
+  const { data: movieList = movies ? movies : [] } = useMovieList() as { data: Movie[] };
   const favorites = useFavorites();
   const { isOpen, closeModal } = useInfoModal();
 
@@ -83,38 +107,108 @@ const HomePage: React.FC<Props> = ({ session, movies, moviesByGenre }) => {
     }
   };
 
-  const alertMovies = moviesByGenre["alert-launchers"] || [];
-  const nasaMovies = moviesByGenre["nasa"] || [];
-  const hightechMovies = movies?.filter(movie => movie.genre === "50-5G&tech") || [];
-  const grapheneMovies = movies?.filter(movie => movie.genre === "oxydedegraphene") || [];
-  const surviveMovies = movies?.filter(movie => movie.genre === "46-survivalisme") || [];
-  const mediacontrolMovies = movies?.filter(movie => movie.genre === "mediacontrol") || [];
-  const oppMovies = movies?.filter(movie => movie.genre === "opposition-controlee") || [];
-  const hiddenMovies = movies?.filter(movie => movie.genre === "60-hidden-history-policy-truth") || [];
-  const hiddenprojectsnowMovies = movies?.filter(movie => movie.genre === "61-hidden-projects-now") || [];
-  const poisonMovies = movies?.filter(movie => movie.genre === "48-empoisonnement-ecology-pollution");
-  const wordsMovies = movies?.filter(movie => movie.genre === "2-etyomologie") || [];
-  const medecineMovies = movies?.filter(movie => movie.genre === "45-medecine") || [];
-  const foodhealthMovies = movies?.filter(movie => movie.genre === "47-food&health") || [];
-  const frequenciesMovies = movies?.filter(movie => movie.genre === "49-body&mind-dna-frequencies") || [];
-  const chemtrailsMovies = movies?.filter(movie => movie.genre === "51-chemtrails&haarp-seisme-bluebbeam") || [];
-  const HHMovies = movies?.filter(movie => movie.genre === "59-historical-hoaxes-till-climatechange") || [];
-  const afrikaMovies = movies?.filter(movie => movie.genre === "70-africa-korps") || [];
-  const beingMovies = movies?.filter(movie => movie.genre === "77-being-complotist") || [];
-  const wakeupMovies = movies?.filter(movie => movie.genre === "78-wake-up") || [];
-  const bbMovies = movies?.filter(movie => movie.genre === "58-bluebeam-evolution") || [];
-  const canbetrueMovies = movies?.filter(movie => movie.genre === "62-canbetrue") || [];
-  const concordismMovies = movies?.filter(movie => movie.genre === "63-concodrisme") || [];
-  const embrouilleursMovies = movies?.filter(movie => movie.genre === "64-embrouilleurs-volontaires-or-50%good") || [];
-  const strangerthingsMovies = movies?.filter(movie => movie.genre === "strangerthings") || [];
-  const oligMovies = movies?.filter(movie => movie.genre === "oligarchie") || [];
-  const hydraMovies = movies?.filter(movie => movie.genre === "banks&hydra") || [];
-  const fmMovies = movies?.filter(movie => movie.genre === "FM+MK") || [];
-  const realityMovies = movies?.filter(movie => movie.genre === "realityis") || [];
-  const idiotsMovies = movies?.filter(movie => movie.genre === "usefull idiots & agents smith") || [];
-
-  console.log('Alert Movies:', beingMovies); // Ajoutez ce log pour vérifier les films
-  console.log('Nasa Movies:', nasaMovies); // Ajoutez ce log pour vérifier les films
+  const alertMovies = movies ? movies.filter(movie =>
+    movie.movieGenres && movie.movieGenres.some(movieGenre => movieGenre.genre && movieGenre.genre.name === "alert-launchers")
+  ) : [];
+  const genres = [
+    "nasa",
+    "50-5G&tech",
+    "oxydedegraphene",
+    "46-survivalisme",
+    "mediacontrol",
+    "opposition-controlee",
+    "60-hidden-history-policy-truth",
+    "61-hidden-projects-now",
+    "48-empoisonnement-ecology-pollution",
+    "2-etyomologie",
+    "45-medecine",
+    "47-food&health",
+    "49-body&mind-dna-frequencies",
+    "51-chemtrails&haarp-seisme-bluebbeam",
+    "59-historical-hoaxes-till-climatechange",
+    "70-africa-korps",
+    "77-being-complotist",
+    "78-wake-up",
+    "58-bluebeam-evolution",
+    "62-canbetrue",
+    "63-concodrisme",
+    "64-embrouilleurs-volontaires-or-50%good",
+    "strangerthings",
+    "oligarchie",
+    "banks&hydra",
+    "FM+MK",
+    "realityis",
+    "usefull idiots & agents smith"
+  ];
+  const chemtrailsMovies = movies ? movies.filter(movie =>
+    movie.movieGenres && movie.movieGenres.some(movieGenre => movieGenre.genre && movieGenre.genre.name === "51-chemtrails&haarp-seisme-bluebbeam")
+  ): [];
+  console.log('Données de films filtrées pour la catégorie "Chemtrails" :', chemtrailsMovies);
+  
+  
+  const moviesByGenreMap = genres.reduce((acc : { [key: string]: Movie[] }, genre) => {
+    acc[genre] = moviesByGenre[genre] || [];
+    return acc;
+  }, {});
+  
+  const {
+    nasaMovies,
+    hightechMovies,
+    grapheneMovies,
+    surviveMovies,
+    mediacontrolMovies,
+    oppMovies,
+    hiddenMovies,
+    hiddenprojectsnowMovies,
+    poisonMovies,
+    wordsMovies,
+    medecineMovies,
+    foodhealthMovies,
+    frequenciesMovies,
+    HHMovies,
+    afrikaMovies,
+    beingMovies,
+    wakeupMovies,
+    bbMovies,
+    canbetrueMovies,
+    concordismMovies,
+    embrouilleursMovies,
+    strangerthingsMovies,
+    oligMovies,
+    hydraMovies,
+    fmMovies,
+    realityMovies,
+    idiotsMovies
+  } = moviesByGenreMap;
+  
+  // const nasaMovies = moviesByGenre["nasa"] || [];
+  // const hightechMovies = moviesByGenre["50-5G&tech"] || [];
+  // const grapheneMovies = moviesByGenre["oxydedegraphene"] || [];
+  // const surviveMovies = moviesByGenre["46-survivalisme"] || [];
+  // const mediacontrolMovies = moviesByGenre["mediacontrol"] || [];
+  // const oppMovies = moviesByGenre["opposition-controlee"] || [];
+  // const hiddenMovies = moviesByGenre["60-hidden-history-policy-truth"] || [];
+  // const hiddenprojectsnowMovies = moviesByGenre["61-hidden-projects-now"] || [];
+  // const poisonMovies = moviesByGenre["48-empoisonnement-ecology-pollution"] || [];
+  // const wordsMovies = moviesByGenre["2-etyomologie"] || [];
+  // const medecineMovies = moviesByGenre["45-medecine"] || [];
+  // const foodhealthMovies = moviesByGenre["47-food&health"] || [];
+  // const frequenciesMovies = moviesByGenre["49-body&mind-dna-frequencies"] || [];
+  // const chemtrailsMovies = moviesByGenre["51-chemtrails&haarp-seisme-bluebbeam"] || [];
+  // const HHMovies = moviesByGenre["59-historical-hoaxes-till-climatechange"] || [];
+  // const afrikaMovies = moviesByGenre["70-africa-korps"] || [];
+  // const beingMovies = moviesByGenre["77-being-complotist"] || [];
+  // const wakeupMovies = moviesByGenre["78-wake-up"] || [];
+  // const bbMovies = moviesByGenre["58-bluebeam-evolution"] || [];
+  // const canbetrueMovies = moviesByGenre["62-canbetrue"] || [];
+  // const concordismMovies = moviesByGenre["63-concodrisme"] || [];
+  // const embrouilleursMovies = moviesByGenre["64-embrouilleurs-volontaires-or-50%good"] || [];
+  // const strangerthingsMovies = moviesByGenre["strangerthings"] || [];
+  // const oligMovies = moviesByGenre["oligarchie"] || [];
+  // const hydraMovies = moviesByGenre["banks&hydra"] || [];
+  // const fmMovies = moviesByGenre["FM+MK"] || [];
+  // const realityMovies = moviesByGenre["realityis"] || [];
+  // const idiotsMovies = moviesByGenre["usefull idiots & agents smith"] || [];
 
   return (
     <>
@@ -122,27 +216,64 @@ const HomePage: React.FC<Props> = ({ session, movies, moviesByGenre }) => {
         <Navbar session={session} />
         <Billboard />
         {!session && <GridThumbnails /> }
-      <div>
+        <div>
           <InfiniteScroll className="fond-infinite"
             dataLength={loadedMovieLists.length}
             next={loadMore}
             hasMore={hasMore}
             loader={<div>Loading...</div>}
           >
-            <MovieList title="Chemtrails" data={chemtrailsMovies} />
-            <MovieList title="Being a conspiracy theorist" data={beingMovies} />
-            <MovieList title="BlueBeam evolution" data={bbMovies} />
-            <MovieList title="Nasa" data={nasaMovies} />
-            <MovieList title="Media Cons d'Troll" data={mediacontrolMovies} />
-            <MovieList title="Survivalisme" data={surviveMovies} />
-            <MovieList title="Lanceurs d'alerte" data={alertMovies} />
-            <MovieList title="5G and dangerous High Tech" data={hightechMovies} />
-            <MovieList title="Waking up" data={wakeupMovies} />
-            <MovieList title="Projects cachés jusque maintenant" data={hiddenMovies} />
-            <MovieList title="Oxyde de Graphène" data={grapheneMovies} />
-            <MovieList title="Afrika CORP" data={afrikaMovies} />
-            <MovieList title="Projects cachés jusque maintenant" data={hiddenprojectsnowMovies} />
-            <MovieList title="Hoaxes dans l'Histoire jusqu'au mytho climatique" data={HHMovies} />
+<MovieList title="Chemtrails" data={moviesByGenre["51-chemtrails&haarp-seisme-bluebbeam"] || []} />
+<MovieList title="Being a conspiracy theorist" data={moviesByGenre["77-being-complotist"] || []} />
+<MovieList title="BlueBeam evolution" data={moviesByGenre["58-bluebeam-evolution"] || []} />
+<MovieList title="Nasa" data={moviesByGenre["nasa"] || []} />
+<MovieList title="Media Cons d'Troll" data={moviesByGenre["mediacontrol"] || []} />
+<MovieList title="Survivalisme" data={moviesByGenre["46-survivalisme"] || []} />
+<MovieList title="Lanceurs d'alerte" data={moviesByGenre["alert-launchers"] || []} />
+<MovieList title="5G and dangerous High Tech" data={moviesByGenre["50-5G&tech"] || []} />
+<MovieList title="Waking up" data={moviesByGenre["78-wake-up"] || []} />
+<MovieList title="Projects cachés jusque maintenant" data={moviesByGenre["60-hidden-history-policy-truth"] || []} />
+<MovieList title="Oxyde de Graphène" data={moviesByGenre["oxydedegraphene"] || []} />
+<MovieList title="Afrika CORP" data={moviesByGenre["70-africa-korps"] || []} />
+<MovieList title="Projects cachés jusque maintenant" data={moviesByGenre["61-hidden-projects-now"] || []} />
+<MovieList title="Hoaxes dans l'Histoire jusqu'au mytho climatique" data={moviesByGenre["59-historical-hoaxes-till-climatechange"] || []} />
+
+
+            {Object.keys(moviesByGenre).map((genre) => (
+              ![
+                "alert-launchers",
+                "nasa",
+                "50-5G&tech",
+                "oxydedegraphene",
+                "46-survivalisme",
+                "mediacontrol",
+                "opposition-controlee",
+                "60-hidden-history-policy-truth",
+                "61-hidden-projects-now",
+                "48-empoisonnement-ecology-pollution",
+                "2-etyomologie",
+                "45-medecine",
+                "47-food&health",
+                "49-body&mind-dna-frequencies",
+                "51-chemtrails&haarp-seisme-bluebbeam",
+                "59-historical-hoaxes-till-climatechange",
+                "70-africa-korps",
+                "77-being-complotist",
+                "78-wake-up",
+                "58-bluebeam-evolution",
+                "62-canbetrue",
+                "63-concodrisme",
+                "64-embrouilleurs-volontaires-or-50%good",
+                "strangerthings",
+                "oligarchie",
+                "banks&hydra",
+                "FM+MK",
+                "realityis",
+                "usefull idiots & agents smith",
+              ].includes(genre) && (
+                <MovieList key={genre} title={genre} data={moviesByGenre[genre]} />
+              )
+            ))}
 
             {loadedMovieLists.map((movie, index) => (
               <Suspense key={movie.id} fallback={<div>Loading MovieList...</div>}>
@@ -161,7 +292,7 @@ const HomePage: React.FC<Props> = ({ session, movies, moviesByGenre }) => {
         <InfoModal visible={isOpen} onClose={closeModal} />
       </div>
     </>
-  )
-}
+  );
+};
 
 export default HomePage;

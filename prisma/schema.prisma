@@ -1,66 +1,63 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL") 
+  url      = env("DATABASE_URL")
 }
 
 model User {
-  id              String          @id @default(uuid()) @map("_id") 
+  id              String          @id @default(uuid()) @map("_id")
   name            String
   image           String?
   email           String?         @unique
-  emailVerified   Boolean         
+  emailVerified   Boolean
   hashedPassword  String?
+  githubId        String?
   createdAt       DateTime        @default(now())
   updatedAt       DateTime        @updatedAt
-  isPremium       Boolean         @default(true)
-  githubId        String?
-  favoriteIds     String[]        
+  favoriteIds     String[]
   sessions        Session[]
   account         Account[]
-  comments        Comment[]
+  isPremium       Boolean
   premiumDuration Int?
-  admin           Boolean        @default(false)
+  provider        String?         @default("none")
+  admin           Boolean
   linkedArticles  LinkedArticle[]
-  favoriteMovies  Movie[]        @relation("UserFavoriteMovies")
+  userMovies      UserMovie[]
+  comments        Comment[]
 }
 
 model Account {
-  id                String  @id @default(uuid()) @map("_id") 
-  userId            String  
+  id                String  @id @default(uuid()) @map("_id")
+  userId            String
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? 
-  access_token      String? 
+  refresh_token     String?
+  access_token      String?
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? 
+  id_token          String?
   session_state     String?
-
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
 
 model Session {
-  id           String   @id @default(uuid()) @map("_id") 
+  id           String   @id @default(uuid()) @map("_id")
   SessionToken String   @unique
-  userId       String   
+  userId       String
   expires      DateTime
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model VerificationToken {
-  id         String   @id @default(uuid()) @map("_id") 
+  id         String   @id @default(uuid()) @map("_id")
   identifier String
   token      String   @unique
   expires    DateTime
@@ -68,54 +65,92 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-
 model Movie {
-  id              String          @id @default(uuid()) @map("_id") 
+  id              String          @id @default(uuid()) @map("_id")
   title           String
+  description     String
+  thumbnailUrl    String?
   videoUrl        String
-  genre           String?
   language        String?
   author          String?
-  thumbnailUrl    String?
   duration        String?
+  verificationLevel Int?
   year            Int?
   rating          Float?
-  description     String?
   favoriteLength  Int
   views           Int
-  linkedArticle   String?
+  outfileArticle  String?
   isTrending      Boolean
   isPremium       Boolean
-  comments        Comment[]
+  premiumDuration Int  @default(90)
   linkedArticles  LinkedArticle[]
-  favoriteUsers   User[]         @relation("UserFavoriteMovies")
+  comments        Comment[]
+  movieGenres     MovieGenre[]
+  userMovies      UserMovie[]
+  movieArticles   MovieArticle[]
+}
+
+model LinkedArticle {
+  id          String   @id @default(uuid()) @map("_id")
+  title       String
+  description String
+  date        DateTime @default(now())
+  userId      String
+  movieId     String
+  imageOne    String
+  imageTwo    String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  movie       Movie    @relation(fields: [movieId], references: [id], onDelete: Cascade)
+  movieArticles MovieArticle[]
+  comments    Comment[]
 }
 
 model Comment {
-  id        String   @id @default(uuid()) @map("_id") 
+  id        String   @id @default(uuid()) @map("_id")
   content   String
   date      DateTime @default(now())
   likes     Int
   dislikes  Int
   ambiguous Int
   best      Boolean
-  // Define fields to store User and Movie IDs
-  userId    String   
-  movieId   String   
-  // Relations to User and Movie
+  userId    String
+  movieId   String
+  linkedArticleId String?
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   movie     Movie    @relation(fields: [movieId], references: [id], onDelete: Cascade)
+  linkedArticle LinkedArticle? @relation(fields: [linkedArticleId], references: [id], onDelete: Cascade)
 }
 
-model LinkedArticle {
-  id          String   @id @default(uuid()) @map("_id") 
-  title       String
-  description String
-  date        DateTime @default(now())
-  userId      String   
-  movieId     String   
-  imageOne    String
-  imageTwo    String
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+model Genre {
+  id          String   @id @default(uuid()) @map("_id")
+  name        String
+  qty         Int
+  movieGenres MovieGenre[]
+}
+
+model UserMovie {
+  userId    String
+  movieId   String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  movie     Movie    @relation(fields: [movieId], references: [id], onDelete: Cascade)
+
+  @@id([userId, movieId])
+}
+
+model MovieArticle {
+  movieId     String
+  articleId   String
   movie       Movie    @relation(fields: [movieId], references: [id], onDelete: Cascade)
+  linkedArticle LinkedArticle @relation(fields: [articleId], references: [id], onDelete: Cascade)
+
+  @@id([movieId, articleId])
+}
+
+model MovieGenre {
+  movieId   String
+  genreId   String
+  movie     Movie    @relation(fields: [movieId], references: [id], onDelete: Cascade)
+  genre     Genre    @relation(fields: [genreId], references: [id], onDelete: Cascade)
+
+  @@id([movieId, genreId])
 }

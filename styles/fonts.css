@@ -1,43 +1,170 @@
 @font-face {
-    font-family: 'kghappy';
-    src: url('/fonts/KGHAPPY.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-  }
-  @font-face {
-    font-family: 'kghappy-shadow';
-    src:url('/fonts/KGHAPPYShadows.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-  }
-  @font-face {
-    font-family: 'toe-jam';
-    src: url('/fonts/toe-jam.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-  }
-  @font-face {
-    font-family: 'earl';
-    src: url('/fonts/earl.otf') format('opentype');
-    font-weight: normal;
-    font-style: normal;
-  }
-  @font-face {
-    font-family: 'doubledecker';
-    src: url('/fonts/doubledecker.otf') format('opentype');
-    font-weight: normal;
-    font-style: normal;
-  }
+  font-family: 'awak';
+  src: url('/fonts/awak.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
 
-  @font-face {
-    font-family: 'subway';
-    src: url('/fonts/matrix.ttf') format('truetype');
-  }
-  .subway{font-family:'subway';}
+@font-face {
+  font-family: 'bebas';
+  src: url('/fonts/bebas.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
 
-  @font-face {
-    font-family: 'marvel';
-    src: url('/fonts/marvel.otf') format('opentype');
-  }
+@font-face {
+  font-family: 'built';
+  src: url('/fonts/built.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
 
-  
+@font-face {
+  font-family: 'candle';
+  src: url('/fonts/candle.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'cocogoose';
+  src: url('/fonts/cocogoose.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'doubledecker';
+  src: url('/fonts/doubledecker.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'earl';
+  src: url('/fonts/earl.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'evogria';
+  src: url('/fonts/Evogria.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'garland';
+  src: url('/fonts/garland.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'gamerock';
+  src: url('/fonts/gamerock.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'gomarice';
+  src: url('/fonts/gomarice.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'gunplay';
+  src: url('/fonts/gunplay.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'hwy';
+  src: url('/fonts/hwy.TTF') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'impacted2';
+  src: url('/fonts/impacted2.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'kungfu';
+  src: url('/fonts/KungFuMasterExpanded.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'mag';
+  src: url('/fonts/mag.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'magbold';
+  src: url('/fonts/magbold.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'marvel';
+  src: url('/fonts/marvel.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'quicksand';
+  src: url('/fonts/QuickSand.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'recoleta';
+  src: url('/fonts/Recoleta.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'subway';
+  src: url('/fonts/matrix.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+.subway {
+  font-family: 'subway';
+}
+
+@font-face {
+  font-family: 'toe-jam';
+  src: url('/fonts/toe-jam.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'urban';
+  src: url('/fonts/UrbanJungle.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'videofreak';
+  src: url('/fonts/videofreak.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}

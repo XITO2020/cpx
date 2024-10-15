@@ -7,23 +7,33 @@ import Link from "next/link";
 
 interface ArticleProps {
   article: LinkedArticle | undefined;
-  articles: LinkedArticle[] | undefined;
+  articles: LinkedArticle[] | undefined | null;
   movie: Movie | undefined;
 }
 
 const MainArticle: React.FC<ArticleProps> = ({movie, article, articles}) => {
   const [currentMovieId, setCurrentMovieId] = useState<string | undefined>();
   const { data, error, isLoading } = useMovie(currentMovieId);
+
+  let movieGenres: string[] = [];
+  if (movie && movie.movieGenres) {
+    movieGenres = movie.movieGenres.map((movieGenre) => movieGenre.genre.name);
+  }  
+
   return (
     <div className={styles.container}>
-      <section className="flex justify-between w-full">
+      <section className="flex justify-between w-full font-cocogoose">
         <div className="">
           <p>Author :</p>
           <p>{article?.user.name}</p>
         </div>
         <div className="">
           <p>Catégorie: </p>
-          <Link href="/">{movie?.genre} </Link>
+          {movieGenres?.map((genre) => (
+            <Link key={genre} href={`/genre/${genre}`}>
+              {genre}
+            </Link>
+          ))}
           <p>rating</p>
           <p></p>
         </div>

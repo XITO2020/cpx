@@ -33,7 +33,7 @@ const Watch: React.FC<WatchProps> = ({ session, movies, articles }) => {
         if (movies && currentMovieId) {
             const currentMovie = movies.find(movie => movie.id === currentMovieId);
             if (currentMovie) {
-                const sameCategoryMovies = movies.filter(movie => movie.genre === currentMovie.genre);
+                const sameCategoryMovies = movies.filter(movie => movie.movieGenres === currentMovie.movieGenres);
                 setFilteredMovies(sameCategoryMovies);
                 setCurrentMovieIndex(sameCategoryMovies.findIndex(movie => movie.id === currentMovieId));
             }
@@ -74,21 +74,20 @@ const Watch: React.FC<WatchProps> = ({ session, movies, articles }) => {
 
             <main className="video-grid mt-20">
 
-                <div className="video-player mt-20">
-                {isLoading && <p>Chargement...</p>}
-                {error && <p>Erreur lors du chargement : {error.message}</p>}
+            <div className="video-player mt-20">
+                {isLoading && <p className="text-white font-evogria text-3xl">Chargement...</p>}
+                {error && <p>Erreur lors du chargement : {JSON.stringify(error)}</p>}
                 {data?.videoUrl && (
                     <>
-                        <ReactPlayer
-                            className="w-full h-full"
-                            url={`/${data.videoUrl}`}
-                            controls
-                            onError={() => alert("Erreur lors de la lecture de la vidéo.")}
-                        />
-
+                    <ReactPlayer
+                        className="w-full h-full text-fuchsia-400 font-evogria text-3xl"
+                        url={`/${data.videoUrl}`}
+                        controls
+                        onError={(error) => console.error("Erreur lors de la lecture de la vidéo :", error)}
+                    />
                     </>
                 )}
-                </div>
+            </div>
 
                 <div className="sidebar-item agencing opacity-30 hover:opacity-100 bg-fuchsia-400">
                     agencing
@@ -119,7 +118,8 @@ const Watch: React.FC<WatchProps> = ({ session, movies, articles }) => {
             </main>
 
             <section>
-                <Blog movie={data} movies={movies} articles={articles} session={session} page="movieId" />
+            <Blog movie={data} movies={movies} article={articles ? articles[0] : undefined} articles={articles} session={session} page="movieId" />
+
             </section>
 
         </div>
@@ -139,7 +139,7 @@ export const getServerSideProps = async (context: any) => {
     }
 
     const movies = await prismadb.movie.findMany();
-    const articles = await prismadb.linkedArticle.findMany();
+    const articles = await prismadb.linkedArticle.findMany() || [];
 
     return {
       props: {

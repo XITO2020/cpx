@@ -7,7 +7,7 @@ with open('Movie.json', 'r') as file:
 
 # Définir les valeurs par défaut pour les champs manquants
 default_values = {
-    'id': str(uuid.uuid4()),
+    'id': '',
     'title': '',
     'videoUrl': '',
     'genre': '',
@@ -21,7 +21,8 @@ default_values = {
     'favoriteLength': 0,
     'views': 0,
     'isTrending': False,
-    'isPremium': False
+    'isPremium': False,
+    'verificationLevel':0,
 }
 
 # Ajouter les champs manquants avec les valeurs par défaut et retirer le champ premiumDuration
@@ -29,6 +30,8 @@ for movie in movies:
     for key, value in default_values.items():
         if key not in movie:
             movie[key] = value
+        if key == 'id':
+            movie['id'] = str(uuid.uuid4())
     if 'premiumDuration' in movie:
         del movie['premiumDuration']
 

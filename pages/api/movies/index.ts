@@ -14,7 +14,22 @@ export default async function handler(
     const userdata = await serverAuth(req, res)
     console.log('mon userdata dans movies/index: ', userdata)
 
-    const movies = await prismadb.movie.findMany()
+    const movies = await prismadb.movie.findMany({
+      include: {
+        movieGenres: {
+          include: {
+            genre: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+        },
+      },
+    });
+    console.log('Données de films récupérées de la base de données :', movies);
+    
     return res.status(200).json(movies)
   } catch (error) {
     console.log(error)

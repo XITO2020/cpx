@@ -12,6 +12,7 @@ interface MovieCardProps {
 }
 
 const MovieCard: React.FC<MovieCardProps> = ({ data, index, ...props }) => {
+    console.log('Données de film reçues par le composant MovieCard :', data);
     const { data: currentUser } = useCurrentUser();
     const router = useRouter();
     const { openModal } = useInfoModal();

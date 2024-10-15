@@ -73,6 +73,25 @@ body{
   z-index:400;
 }
 
+.contact-square{
+  width: 200px;
+  height: 200px;
+  margin:20px 20px;
+  padding:5px 5px;
+  border-radius:15px;
+  background:#1c1c1c;
+  transition:ease-in-out .4s;
+  display:flex;
+  align-items:center;
+  text-align:center;
+  justify-content:center;
+
+}
+.contact-square:hover{
+  box-shadow: 0px 0px 20px #d1845b; 
+  color:#080808;
+}
+
 .filmroll{
   background:url("/thumbnails/2-etymology/cplsquaretriple.png");
   background-size:cover;
@@ -563,14 +582,20 @@ display: none !important;
     20% {
       background: rgb(56, 5, 77);
     }
+    30% {
+      background: mediumvioletred;
+    }
     40% {
       background: lightpink;
     }
-    60% {
+    50% {
       background: peachpuff;
     }
-    80% {
+    65% {
       background: lemonchiffon;
+    }
+    80% {
+      background: palegreen;
     }
     99% {
       background: turquoise;

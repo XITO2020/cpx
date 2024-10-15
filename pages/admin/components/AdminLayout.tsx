@@ -5,7 +5,7 @@ import Link from 'next/link';
 const AdminLayout = ({ children }: { children: ReactNode }) => {
   return (
     <div className="-z-20">
-      <nav className={`tracking-widest w-full hover:bg-neutral-300 bg-neutral-800 h-24 hover:text-slate-700 font-earl extrabold text-red-600 text-2xl flex justify-evenly items-center ${styles.dashboardnav} `}>
+      <nav className={`tracking-widest w-full hover:bg-neutral-500 bg-neutral-800 h-24 hover:text-slate-900 font-built extrabold text-red-600 text-2xl flex justify-evenly items-center ${styles.dashboardnav} `}>
         <Link href="/">
           <img src="/img/conspix/cpL.gif"width="300px" alt="conspix animation" className="hover:mix-blend-exclusion" />
         </Link>
@@ -22,7 +22,7 @@ const AdminLayout = ({ children }: { children: ReactNode }) => {
         <main className="p-8">{children}</main>
         {/* Footer d'administration */}
         <footer>
-        <p className="sm text-center text-red-950">Encart publicitaire</p>
+        <p className="sm text-center text-red-950 font-candle">Encart publicitaire</p>
         <div className={`${styles.adflex}`}>
           <div></div>
           <div></div>

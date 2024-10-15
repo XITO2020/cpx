@@ -5,6 +5,7 @@ import { getServerSession } from 'next-auth';
 import { CustomSession } from '@/lib/types';
 import { authOptions } from './api/auth/[...nextauth]';
 import Blog from '@/components/blog/blog';
+import Top100 from '@/components/top100';
 
 interface EditorialProps {
   session: CustomSession | null;
@@ -24,7 +25,7 @@ const New: React.FC<EditorialProps> = ({ session, admin, data, movies, articles 
   return (
     <div className="newbackground w-full relative -top-10">
       <Navbar session={session} />
-
+      <Top100 />
       <section className="edito">
         <div className="sorties bg-zinc-900">
            <p></p> J'ai terminé la Fronce

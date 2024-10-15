@@ -5,10 +5,10 @@ import Credentials from 'next-auth/providers/credentials';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { compare } from 'bcrypt';
 import prismadb from '@/lib/prismadb';
-import { User, CustomSession } from '@/lib/types'; 
+import { User, CustomSession } from '@/lib/types';
 
 export const authOptions: AuthOptions = {
-  providers: [  
+  providers: [
     Credentials({
       id: 'credentials',
       name: 'Credentials',
@@ -59,9 +59,10 @@ export const authOptions: AuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
-        token.isPremium = (user as User).isPremium; 
+        token.isPremium = (user as User).isPremium;
         token.admin = (user as User).admin;
-        // token.emailVerified = (user as User).emailVerified !== null; // Convertir DateTime en Boolean
+        token.email = (user as User).email;
+        token.emailVerified = (user as User).emailVerified;
       }
       return token;
     },
@@ -71,7 +72,8 @@ export const authOptions: AuthOptions = {
         user.id = token.id as string ?? null;
         user.isPremium = token.isPremium as boolean ?? false;
         user.admin = token.admin as boolean ?? false;
-        //user.emailVerified = token.emailVerified as Boolean ?? true; 
+        user.email = token.email as string ?? '';
+        user.emailVerified = token.emailVerified as boolean ?? false;
       }
       return session;
     }

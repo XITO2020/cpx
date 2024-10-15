@@ -15,6 +15,7 @@ function AddMovieForm() {
     formData.append('video', data.video[0]);
 
     try {
+      // multipart data form poru l'upload du fichier file
       const response = await fetch('/api/movies/upload', {
         method: 'POST',
         body: formData,
@@ -39,8 +40,8 @@ function AddMovieForm() {
       <input className={`text-center bg-purple-950 hover:bg-purple-500 hover:text-black rounded-md ${styles.placeholderDark} ${styles.inputfield} ${styles.shadowpurple} `} {...register('genre')} placeholder="Genre (séléction de carégories)" />
       <input className={`text-center bg-pink-500 hover:bg-yellow-400 hover:text-black rounded-md ${styles.placeholderDark} ${styles.inputfield} ${styles.shadowyellow} `} {...register('author')} placeholder="nom de l'auteur ou du groupe producteur" />
       <input className={`text-center bg-rose-700 hover:bg-rose-400 hover:text-black rounded-md ${styles.placeholderDark} ${styles.inputfield} ${styles.shadowrose} `} {...register('thumbnailUrl')} placeholder="URL de l'image de couverture" />
-      <textarea className={`text-center bg-red-900 hover:bg-red-500 hover:text-black rounded-md ${styles.placeholderDark} ${styles.inputfield} ${styles.shadowrose} `} {...register('description')} placeholder="Description de la vidéo" />
-      <input type="file" className={`text-center bg-green-900 hover:bg-green-500 hover:text-black rounded-md ${styles.placeholderDark} ${styles.inputfield} ${styles.shadowgreen} `} {...register('video', { required: 'Veuillez sélectionner une vidéo' })} />
+      <textarea className={`text-center bg-pink-800 hover:bg-amber-300 hover:text-black rounded-md ${styles.placeholderDark} ${styles.inputfield} ${styles.shadowrose} `} {...register('description')} placeholder="Description de la vidéo" />
+      <input type="file" className={`text-center bg-violet-800 hover:bg-pink-400 hover:text-black rounded-md ${styles.placeholderDark} ${styles.inputfield} ${styles.shadowgreen} `} {...register('video', { required: 'Veuillez sélectionner une vidéo' })} />
       {errors.video && <span>{errors.video.message as string}</span>}
       <button className="bg-neutral-800 text-rose-500 font-extrabold w-full rounded-md py-2 mt-5 mb-2 hover:bg-neutral-700 hover:outline-slate-600 hover:outline-double hover:text-rose-700" type="submit">Envoyez votre vidéo</button>
     </form>

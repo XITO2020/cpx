@@ -15,6 +15,7 @@ interface MovieListProps {
 }
 
 const MovieList: React.FC<MovieListProps> = ({ data, session, title }) => {
+    console.log('Données de films reçues par le composant MovieList :', data);
     const windowSize = useWindowSize();
 
     if (isEmpty(data)) {
@@ -38,13 +39,14 @@ const MovieList: React.FC<MovieListProps> = ({ data, session, title }) => {
 
     return (
         <div className={`movie-list px-4 py-8 pb-12 md:px-12 mt-4 space-y-8 relative overflow-visible 
-        hover:overflow-visible  hover:z-50 bg-gradient-to-r from-violet-400 to-pink-300
+        hover:overflow-visible  hover:z-50 bg-transparent
         hover:ring-offset-8 hover:ease-in duration-1000`}>
             <div className="flex flex-w w-full justify-between">
-                <p className="text-white text-md md:text-2xl lg:text-2xl font-semibold mb-4 title-slide">
+                <p className="text-white text-md md:text-2xl lg:text-2xl font-semibold mb-4 title-slide hover:bg-gradient-to-r from-violet-400 to-pink-300 p-2 rounded-lg">
                     {title}
                 </p>
-                <Exauster genre={data && data.length > 0 ? data[0].genre : ''} />
+                <Exauster movieGenres={data && data.length > 0 ? data[0].movieGenres ?? [] : []} />
+
             </div>
             {renderSlider()}
         </div>

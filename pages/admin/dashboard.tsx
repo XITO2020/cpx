@@ -34,11 +34,13 @@ const Dashboard: React.FC<DashboardProps> = ({ session, admin }) => {
         {!isAdmin && <p className="text-center text-rose-400 text-xl my-6 z-10">Postez des articles, des vidéos et modifiez votre profil ici</p>}
         <section className="w-full min-h-screen bg-green-800 hover:bg-teal-950 bg-opacity-30 hover:bg-opacity-60 duration-500 m-4 p-4 -z-10">
           
-          <h2 className="text-center font-earl tracking-widest z-10">Ecrivez un article en lien avec une des vidéos de conspix</h2>
-          <AddLinkedArticleForm />
-          <h2 className="text-center font-earl  tracking-widest z-10">Postez et classez dans le bon registre votre propre vidéo, ou une qui vous parle</h2>
+          <h2 className="text-center font-awak tracking-widest z-10">Postez jusque <span className="font-evogria">12</span> videos pour gagner</h2>
           <AddMovieForm />
-          <h2 className="text-center font-earl  tracking-widest z-10">Changez de nom et d'image</h2>
+        
+          <h2 className="text-center font-awak tracking-widest z-10">Ecrivez un article en lien avec une des vidéos de conspix</h2>
+          <AddLinkedArticleForm />
+          
+          <h2 className="text-center font-evogria tracking-widest z-10">Changez de nom et d'image</h2>
 
           <form className="flex flex-col items-center bg-black p-8 mx-auto mt-8 mb-4 text-neutral-400 w-[50%] z-10" onSubmit={handleSubmit(onSubmit)}>
 

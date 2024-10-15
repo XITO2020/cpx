@@ -9,16 +9,32 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        'recoil':['Recoleta'],
-        'mag':['Magazine'],
-        'magbold':['Magazine-Bold'],
-        'matrix':['matrix'],
-        'candle':['candle'],
-        'toejam': ['toe-jam'],
-        'earl': ['earl'],
-        'random': ['doubledecker'],
-        'bebas': ['bebas'],
-        'marvel': ['marvel'],
+        
+          'awak': ['awak'],
+          'bebas': ['bebas'],
+          'built': ['built'],
+          'candle': ['candle'],
+          'cocogoose': ['cocogoose'],
+          'earl': ['earl'],
+          'evogria': ['evogria'],
+          'garland': ['graland'],
+          'gamerock': ['gamerock'],
+          'gomarice': ['gomarice'],
+          'gunplay': ['gunplay'],
+          'hwy': ['hwy'],
+          'impacted2': ['impacted2'],
+          'kungfu': ['kungfu'],
+          'mag': ['mag'],
+          'magbold': ['magbold'],
+          'marvel': ['marvel'],
+          'quicksand': ['quicksand'],
+          'random': ['doubledecker'],
+          'recoleta': ['recoleta'],
+          'toejam': ['toe-jam'],
+          'urban': ['urban'],
+          'videofreak': ['videofreak']
+        
+        
       },
       backgroundImage: {
         'hero-pattern': "url('/img/retour.gif')",

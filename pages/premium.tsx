@@ -1,22 +1,48 @@
 import Navbar from '@/components/Navbar';
 import { CustomSession } from '@/lib/types';
-import { getSession } from 'next-auth/react';
+import { getServerSession } from 'next-auth';
+import { authOptions } from './api/auth/[...nextauth]';
 import { GetServerSideProps } from 'next';
 import Link from 'next/link';
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-    const session = await getSession(context);
-
-    return {
-        props: {
-            session: session as CustomSession | null,
-        },
-    };
-};
 
 interface PremiumProps {
     session: CustomSession | null;
 }
+
+export const getServerSideProps: GetServerSideProps<PremiumProps> = async (context) => {
+    const session = await getServerSession(context.req, context.res, authOptions);
+    if (!session || !session.user || !session.user.email) {
+      return {
+        props: {
+          session: null,
+          movies: null,
+        },
+      };
+    }
+  
+    const user = await prismadb.user.findUnique({
+      where: { email: session.user.email },
+      include: {
+        favoriteMovies: true,
+      },
+    });
+  
+    // Convertir la propriété createdAt en une chaîne de caractères
+    if (user) {
+      user.createdAt = user.createdAt.toISOString();
+      user.createdAt = user.updatedAt.toISOString();
+    }
+  
+    const movies = user ? user.favoriteMovies || [] : [];
+  
+    return {
+      props: {
+        session,
+        movies,
+      },
+    };
+  };
+
 
 const Premium: React.FC<PremiumProps> = ({ session }) => {
     return (

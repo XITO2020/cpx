@@ -1,17 +1,16 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import { getServerSession } from "next-auth";
-import { CustomSession } from "@/lib/types";
+import { NextApiRequest, NextApiResponse } from 'next';
+import { getServerSession } from 'next-auth';
+import { CustomSession } from '@/lib/types';
 import prismadb from '@/lib/prismadb';
-import { authOptions } from "@/pages/api/auth/[...nextauth]";
+import { authOptions } from '@/pages/api/auth/[...nextauth]';
 
-/**
- * Fonction utilisée pour authentifier les utilisateurs sur le serveur.
- * Récupère les informations de session et cherche l'utilisateur correspondant dans la base de données.
- */
-const serverAuth = async (req: NextApiRequest, res: NextApiResponse): Promise<{ customSession: CustomSession }> => {
+const serverAuth = async (
+  req: NextApiRequest,
+  res: NextApiResponse
+): Promise<{ customSession: CustomSession }> => {
   try {
     // Récupérer la session du serveur
-    const session = await getServerSession(req, res, { ...authOptions, strategy: 'jwt' });
+    const session = await getServerSession(req, res, authOptions);
 
     // Vérifier si l'utilisateur est connecté en vérifiant si son email est défini dans la session
     if (!session?.user?.email) {
@@ -22,7 +21,7 @@ const serverAuth = async (req: NextApiRequest, res: NextApiResponse): Promise<{ 
     const currentUser = await prismadb.user.findUnique({
       where: {
         email: session.user.email,
-      }
+      },
     });
 
     // Vérifier si l'utilisateur existe dans la base de données
@@ -30,15 +29,13 @@ const serverAuth = async (req: NextApiRequest, res: NextApiResponse): Promise<{ 
       throw new Error('User not found in the database');
     }
 
-    // Vérifier si l'utilisateur est un administrateur
-    if (currentUser.admin !== true) {
-      throw new Error('User is not an administrator');
-    }
-
     // Créer une instance de CustomSession avec l'utilisateur trouvé
     const customSession: CustomSession = {
       ...session,
-      admin: currentUser.admin, 
+      user: currentUser,
+      admin: currentUser.admin,
+      email: currentUser.email ?? '',
+      emailVerified: currentUser.emailVerified ?? false,
     };
 
     return { customSession }; // Retourner l'instance de CustomSession
@@ -46,6 +43,6 @@ const serverAuth = async (req: NextApiRequest, res: NextApiResponse): Promise<{ 
     console.error('Error in serverAuth:', error);
     throw new Error('Error in serverAuth: ' + error.message); // Lancer une erreur avec un message explicite
   }
-}
+};
 
 export default serverAuth;

@@ -17,7 +17,6 @@ return (
         <MovieList title="Historical Hoax" data={hoaxMovies} />
         <MovieList title="Histoire secrete et politique" data={HHMovies} />
         <MovieList title="projets encore secrets de nos jours" data={HprojectsMovies} />
-
     </div>    
 
 )

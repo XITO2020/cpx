@@ -32,8 +32,13 @@ export const getServerSideProps: GetServerSideProps<ContactProps> = async (conte
     },
   });
 
-  const movies = user?.favoriteMovies || [];
-  
+  // Convertir la propriété createdAt en une chaîne de caractères
+  if (user) {
+    user.createdAt = user.createdAt.toISOString();
+    user.createdAt = user.updatedAt.toISOString();
+  }
+
+  const movies = user ? user.favoriteMovies || [] : [];
 
   return {
     props: {
@@ -52,18 +57,42 @@ export default function contact ({ session, movies }: ContactProps) {
           <>
             <Navbar session={session} />
             <div className="w-full min-h-screen bg-gradient-to-r from-amber-900 to-black px-16 py-24 text-stone-400">
-                <h1>Contact...</h1>
+                <div className="w-[800px] mx-auto flex flex-wrap justify-evenly mt-16 font-evogria">
+                <div className="contact-square hover:bg-yellow-300">
+                  <h2>use vpn... send mail to this temporarymail with a temporary mail</h2>
+                </div>
+                <div className="contact-square hover:bg-green-300">
+                  <h2>Mettre votre publicité dans le site</h2>
+                </div>
+                <div className="contact-square hover:bg-teal-300">
+                  <h2>Vous êtes une association</h2>
+                </div>
+                <div className="contact-square hover:bg-green-400">
+                  <h2>Devenir modérateur</h2>
+                </div>
+                <div className="contact-square hover:bg-amber-300">
+                  <h2>Acheter plus de NFT</h2>
+                </div>
+                <div className="contact-square hover:bg-fuchsia-300">
+                  <h2>Demander un service numérique</h2>
+                </div>
+                <div className="contact-square hover:bg-violet-300">
+                  <h2>Aider au développement de jeux en ligne (javascript python)</h2>
+                </div>
+                <div className="contact-square hover:bg-pink-300">
+                  <h2>Nous soutenir financièrement</h2>
+                </div>
+                <div className="contact-square hover:bg-violet-700">
+                  <h2>Soumettre une catégorie de film</h2>
+                </div>
+                <div className="contact-square hover:bg-purple-700">
+                  <h2>Nous recommander votre site pour un partenariat</h2>
+                </div>
+                </div>
+        
                 
-                <h2>use vpn... send mail to this temporarymail with a temporary mail</h2>
-                <h2>Mettre votre publicité dans le site</h2>
-                <h2>Vous êtes une association</h2>
-      
-                <h2>Acheter plus de NFT</h2>
-                <h2>Devenir modérateur</h2>
-                <h2>Demander un service numérique</h2>
-                <h2>Nous soutenir financièrement</h2>
-                <h2>Soumettre une catégorie de film</h2>
-                <h2>Aider au développement de jeux en ligne (javascript python)</h2>
+                
+                
 
                 <div className="faq tex-black">
                   <h2>FAQ</h2>

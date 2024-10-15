@@ -17,8 +17,6 @@ type ProfileProps = {
 
 export const getServerSideProps: GetServerSideProps<ProfileProps> = async (context) => {
   const session = await getServerSession(context.req, context.res, authOptions);
-  console.log("SESSION", session);
-
   if (!session || !session.user || !session.user.email) {
     return {
       props: {
@@ -35,7 +33,13 @@ export const getServerSideProps: GetServerSideProps<ProfileProps> = async (conte
     },
   });
 
-  const movies = user?.favoriteMovies || [];
+  // Convertir la propriété createdAt en une chaîne de caractères
+  if (user) {
+    user.createdAt = user.createdAt.toISOString();
+    user.createdAt = user.updatedAt.toISOString();
+  }
+
+  const movies = user ? user.favoriteMovies || [] : [];
 
   return {
     props: {

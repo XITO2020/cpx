@@ -9,7 +9,8 @@
     background:linear-gradient(rgb(65, 1, 32),#771234 ,tomato) !important;
 }
 .tapiscyan{
-    background:#aafcfe;
+    background:url('/img/blog.png');
+    background-size:cover;
     width:80%;
     padding:16px;
     margin:0 auto;

@@ -19,4 +19,39 @@ const games : React.FC<GamesProps> = ({session}) => {
   )
 }
 
+export const getServerSideProps: GetServerSideProps<NavbarProps> = async (context) => {
+  const session = await getServerSession(context.req, context.res, authOptions);
+  if (!session || !session.user || !session.user.email) {
+    return {
+      props: {
+        session: null,
+        movies: null,
+      },
+    };
+  }
+
+  const user = await prismadb.user.findUnique({
+    where: { email: session.user.email },
+    include: {
+      favoriteMovies: true,
+    },
+  });
+
+  // Convertir la propriété createdAt en une chaîne de caractères
+  if (user) {
+    user.createdAt = user.createdAt.toISOString();
+    user.createdAt = user.updatedAt.toISOString();
+  }
+
+  const movies = user ? user.favoriteMovies || [] : [];
+
+  return {
+    props: {
+      session,
+      movies,
+    },
+  };
+};
+
+
 export default games
