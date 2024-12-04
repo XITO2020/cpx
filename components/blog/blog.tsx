@@ -34,7 +34,7 @@ const Blog: React.FC<BlogProps> = ({ movie, session, movies, article, articles, 
   return (
     <div className={`${page === 'movieId' ? `${styles.tapisvert} ${styles.container}` : `${styles.tapiscyan}`}`}>
       <div className="flex justify-between px-12 items-center h-16">
-        <Image src="/img/conspix/popcorn.png" alt="image d'habillage" height={100} width={200} />
+        <Image src="/icons/popcorn.png" alt="image d'habillage" height={100} width={200} />
         <h1 className="text-red-500 text-bold text-2xl">{movie?.title}</h1>
         <h2 className="text-4xl text-extrabold subway white">Le Blog</h2>
       </div>

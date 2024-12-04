@@ -9,6 +9,8 @@ import { authOptions } from './api/auth/[...nextauth]';
 import prismadb from '@/lib/prismadb'; //
 import Search from '@/components/Search';
 import Favorites from '@/components/Favorites';
+import { useSessionContext } from '../contexts/sessionContext';
+
 
 type ProfileProps = {
   session: CustomSession | null;
@@ -17,6 +19,7 @@ type ProfileProps = {
 
 export const getServerSideProps: GetServerSideProps<ProfileProps> = async (context) => {
   const session = await getServerSession(context.req, context.res, authOptions);
+  
   if (!session || !session.user || !session.user.email) {
     return {
       props: {
@@ -37,6 +40,9 @@ export const getServerSideProps: GetServerSideProps<ProfileProps> = async (conte
   if (user) {
     user.createdAt = user.createdAt.toISOString();
     user.createdAt = user.updatedAt.toISOString();
+  }
+  if (!session) {
+    return <p>You are not logged in</p>;
   }
 
   const movies = user ? user.favoriteMovies || [] : [];
@@ -113,6 +119,16 @@ const Profiles = ({ session, movies }: ProfileProps) => {
               </div>
             </div>
           </div>
+        </div>
+
+
+        {/* Affichage temporaire de l'user connecté */}
+        <div>
+          <h1>Welcome, {session?.user?.email}</h1>
+          <p>ID: {session?.user?.id}</p>
+          <p>Premium: {session?.user?.isPremium ? 'Yes' : 'No'}</p>
+          <p>Admin: {session?.user?.admin ? 'Yes' : 'No'}</p>
+          <p>Email Verified: {session?.user?.emailVerified ? 'Yes' : 'No'}</p>
         </div>
 
          {/* Affichage des films favoris */}

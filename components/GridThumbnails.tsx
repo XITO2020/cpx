@@ -9,7 +9,7 @@ const GridThumbnails = () => {
           <Image src="/img/advised3.png" width={600} height={450} alt="advised content picture presents:" />
         </div>
         <div className="w-[70%] mx-auto flex flex-col items-center">
-          <h1 className="text-neutral-600  font-kghappy mt-16 text-2xl tracking-wide"><img src="/img/top50.png" width="120px" className="mx-auto" /> des films tendances distribués par Conspix</h1>
+          <h1 className="text-neutral-600  font-kghappy mt-16 text-2xl tracking-wide"><img src="/icons/top50.png" width="120px" className="mx-auto" /> des films tendances distribués par Conspix</h1>
           <Link href="/auth" className="text-neutral-600  hover:text-red-400">Connectez-vous pour visionner le top 100 et plus encore !</Link>
         </div>
          

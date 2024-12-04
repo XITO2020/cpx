@@ -57,11 +57,10 @@ export type Movie = {
   id: string;
   title: string;
   description: string;
-  thumbnailUrl?: string;
+  thumbnailUrl: string;
   videoUrl: string;
-  language?: string;
-  author?: string;
-  duration?: string;
+  duration: string;
+  genre: string;
   verificationLevel?: number;
   year?: number;
   rating?: number;
@@ -143,3 +142,9 @@ export type ServerAuthResponse = {
   error?: string;
   currentUser?: User;
 };
+
+
+export interface Session {
+  user?: User;
+  expires: string;
+}

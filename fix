@@ -1,0 +1,81 @@
+// UserContext.tsx
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { useSession } from 'next-auth/react';
+
+interface User {
+  id: string;
+  email: string;
+  name?: string;
+  image?: string;
+  // Ajoutez d'autres propriétés selon votre modèle utilisateur
+}
+
+interface UserContextType {
+  user: User | null;
+  setUser: (user: User | null) => void;
+}
+
+const UserContext = createContext<UserContextType | undefined>(undefined);
+
+export function UserProvider({ children }: { children: ReactNode }) {
+  const [user, setUser] = useState<User | null>(null);
+  const { data: session } = useSession();
+
+  useEffect(() => {
+    if (session?.user) {
+      setUser({
+        id: session.user.id || '',
+        email: session.user.email || '',
+        name: session.user.name || '',
+        image: session.user.image || '',
+      });
+    } else {
+      setUser(null);
+    }
+  }, [session]);
+
+  return (
+    <UserContext.Provider value={{ user, setUser }}>
+      {children}
+    </UserContext.Provider>
+  );
+}
+
+export function useUser() {
+  const context = useContext(UserContext);
+  if (context === undefined) {
+    throw new Error('useUser doit être utilisé à l\'intérieur d\'un UserProvider');
+  }
+  return context;
+}
+
+// Modification du _app.tsx
+import { SessionProvider } from 'next-auth/react';
+import { UserProvider } from '../context/UserContext';
+
+function MyApp({ Component, pageProps: { session, ...pageProps } }) {
+  return (
+    <SessionProvider session={session}>
+      <UserProvider>
+        <Component {...pageProps} />
+      </UserProvider>
+    </SessionProvider>
+  );
+}
+
+export default MyApp;
+
+// Exemple d'utilisation dans n'importe quel composant
+/*
+import { useUser } from '../context/UserContext';
+
+function MonComposant() {
+  const { user } = useUser();
+  
+  if (!user) {
+    return <div>Veuillez vous connecter</div>;
+  }
+
+  return <div>Bienvenue {user.name}</div>;
+}
+*/

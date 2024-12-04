@@ -1,26 +1,48 @@
 const Footer = () =>{
     return (
         <div className="w-full h-64 netflix transition border-opacity-60
-         border-t-rose-700 border-t-2">
+         border-t-rose-700 border-t-2 mt-5 pt-3">
             <ul className="flex flex-row justify-evenly text-zinc-700 items-center h-24">
-                <li><a href="#" target="_blank"><img src="/img/tbcity.png" alt="logo tabascocity"
+                <li className="flex items-center justify-between w-[400px]"><a href="#" target="_blank">
+                    <img src="/icons/tbcity.png" alt="logo tabascocity" width="250"
                  className="w-32 opacity-70 hover:opacity-100 glowy transition" /></a>
-                 <p>architecture-robloxcity/portfolio/eCom</p>
+                 <p className="text-center p-4 hover:text-white hover:opacity-60">Capital Center of this websites ecosystem</p>
                  </li>
-                <li><a href="#" target="_blank">Shonen Dump</a><p>Manga/webcomics</p></li>
-                <li><a href="#" target="_blank">Memeral Reserv</a><p>NFT/MEMES</p></li>
-                <li><a href="#" target="_blank">Scroll You All</a><p>discord/team-crea-roman-photo</p></li>
-                <li><a href="#" target="_blank"><img src="/img/zz-lemon.png" alt="logo zarmazon" className="w-32 opacity-100" />
-                </a><p>eCom/zarmazon prime concurrence</p></li>
+
+                <li className="flex items-center justify-around w-[400px]"><a href="#" target="_blank">
+                    <img src="/icons/shonen-detoured.png" alt="logo tabascocity" width="150"
+                 className="opacity-70 hover:opacity-100 glowy transition" /></a>
+                 <p className="text-center p-4 hover:text-white hover:opacity-60">Shonen.industries:<br/> become a famous mangaka !</p>
+                 </li>
+
+
+
+                <li className="flex items-center justify-between w-[400px]"><a href="#" target="_blank">
+                    <img src="/icons/artgold.png" alt="logo artnfact" width="150"
+                 className="w-24 opacity-70 hover:opacity-100 glowy transition" /></a>
+                 <p className="text-center p-4 hover:text-white hover:opacity-60">ArtNfact.art: <br/>Exchange your art with gold & crypto</p>
+                 </li>
+
             </ul>
 
             <ul className="flex flex-row justify-evenly text-zinc-700 items-center h-24">
-                <li><a href="#" target="_blank">GreenScreenSchool</a><p>LMS: Paranostra how to hack</p></li>
-                <li><a href="#" target="_blank">nouvelle <img src="/img/doxa.png" alt="doxa" className="w-16" />
-                </a><p>blog/articles</p></li>
-                <li><a href="#" target="_blank">Future404</a><p>point&clickGame</p></li>
-                <li><a href="#" target="_blank">Terra343</a><p>Arcos-landing-renting</p></li>
-                <li><a href="#" target="_blank">Garow, game of Truth</a><p>quizz-games</p></li>
+                <li className="flex items-center justify-between w-[350px]"><a href="#" target="_blank">
+                    <img src="/icons/logo6.png" alt="doxa" width="150" 
+                    className="w-48 opacity-70 hover:opacity-100 glowy transition" />
+                </a><p className="text-center p-4 hover:text-white hover:opacity-60">Tshirts.land:<br/>Play and win your best T-shirts</p>
+                </li>
+
+                <li className="flex items-center justify-between w-[350px]"><a href="#" target="_blank">
+                    <img src="/icons/podcast2.png" alt="logo tabascocity"
+                 className="w-64 opacity-70 hover:opacity-100 glowy transition" /></a>
+                 <p className="text-center p-4 hover:text-white hover:opacity-60">Podcast.press:<br/>Give a public to your Podcasts</p>
+                 </li>
+              
+                
+                <li className="flex items-center justify-between w-[400px]"><a href="#" target="_blank">
+                    <img src="/icons/zz-lemon.png" alt="logo zarmazon" width="350"
+                    className="w-40 opacity-70 hover:opacity-100 glowy transition" />
+                </a><p className="text-center p-4 hover:text-white hover:opacity-60">Algerian Ecommerce<br/>Zarmazon prime concurrence<br/> <i>Serious Soon !</i></p></li>
                 
                 
             </ul>

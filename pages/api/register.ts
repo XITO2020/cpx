@@ -33,7 +33,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
 
         const hashedPassword = await bcrypt.hash(password, 12);
-
+        console.log("Hashed password:", hashedPassword);
         const user = await prismadb.user.create({
             data: {
                 email,
@@ -43,6 +43,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 emailVerified: true,
             }
         });
+        console.log("User created:", user);
 
         // 4. Vérifiez si l'utilisateur a été créé avec succès
         if (!user) {
@@ -56,11 +57,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     } catch (error) {
         // 5. Affichez les erreurs pour déboguer
         console.log("Error during user registration:", error);
-
+    
         if (error instanceof Error) {
-            return res.status(400).json({ error: error.message });
+            console.log("Error message:", error.message);
+            console.log("Error stack:", error.stack);
+            return res.status(400).json({ 
+                error: error.message,
+                details: error.stack 
+            });
         } else {
-            return res.status(400).json({ error: "An unknown error occurred." });
+            return res.status(400).json({ 
+                error: "Une erreur inconnue s'est produite",
+                details: String(error)
+            });
         }
     }
 }

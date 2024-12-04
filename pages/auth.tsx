@@ -38,7 +38,10 @@ const Auth = () =>{
                 email,
                 password,
                 callbackUrl: '/',
-                redirect: false
+                redirect: false,
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                  },
             });
             router.push('/profiles');
         }
@@ -50,14 +53,19 @@ const Auth = () =>{
 
     const register = useCallback(async () => {
         try {
+            console.log(email, name, password)
             await axios.post('/api/register', {
                 email,
                 name,
                 password
+            }, {
+                headers: {
+                    'Content-Type': 'application/json',
+                  },
             });
             login();
         } catch( error) {
-            console.log("l'erreur elle est la: " +error)
+            console.log("l'erreur elle est la: " , error)
         }
     }, [email, name, password, login]);
 

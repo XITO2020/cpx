@@ -95,7 +95,6 @@ export default function contact ({ session, movies }: ContactProps) {
                 
 
                 <div className="faq tex-black">
-                  <h2>FAQ</h2>
                   <FAQ />
                 </div>
             </div>

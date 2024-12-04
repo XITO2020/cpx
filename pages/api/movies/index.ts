@@ -1,38 +1,14 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-
-import prismadb from '@/lib/prismadb'
-import serverAuth from '@/lib/serverAuth'
+import { Movie } from '@/lib/types'
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse<Movie[] | { error: string }>
 ) {
-  if (req.method !== 'GET') {
-    return res.status(405).end()
-  }
   try {
-    const userdata = await serverAuth(req, res)
-    console.log('mon userdata dans movies/index: ', userdata)
-
-    const movies = await prismadb.movie.findMany({
-      include: {
-        movieGenres: {
-          include: {
-            genre: {
-              select: {
-                id: true,
-                name: true,
-              },
-            },
-          },
-        },
-      },
-    });
-    console.log('Données de films récupérées de la base de données :', movies);
-    
-    return res.status(200).json(movies)
+    // Logique pour récupérer les films
+    res.status(200).json([]);
   } catch (error) {
-    console.log(error)
-    return res.status(400).end()
+    res.status(500).json({ error: 'Erreur serveur interne' });
   }
 }

@@ -86,6 +86,11 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context) => 
 };
 
 const HomePage: React.FC<Props> = ({ session, movies = [], moviesByGenre = {} }) => {
+
+  console.log("Session dans HomePage:", session);
+  console.log("Movies initiaux:", movies);
+  console.log("MoviesByGenre initiaux:", moviesByGenre);
+
   const { data: movieList = movies ? movies : [] } = useMovieList() as { data: Movie[] };
   const favorites = useFavorites();
   const { isOpen, closeModal } = useInfoModal();

@@ -42,6 +42,7 @@ export const authOptions: AuthOptions = {
         }
 
         return user;
+        
       }
     })
   ],
@@ -56,7 +57,12 @@ export const authOptions: AuthOptions = {
   },
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
+    async redirect({ url, baseUrl }) {
+      console.log("Redirection:", { url, baseUrl });
+      return baseUrl + '/profiles';
+    },
     async jwt({ token, user }) {
+      console.log("JWT callback:", { token, user })
       if (user) {
         token.id = user.id;
         token.isPremium = (user as User).isPremium;
@@ -67,7 +73,8 @@ export const authOptions: AuthOptions = {
       return token;
     },
     async session({ session, token }) {
-      if (token && session.user) {
+      console.log("session callback: ", {session, token})
+      if (token && session?.user) {
         const user = session.user as User; // Assertion de type pour `session.user`
         user.id = token.id as string ?? null;
         user.isPremium = token.isPremium as boolean ?? false;

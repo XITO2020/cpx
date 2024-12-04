@@ -113,9 +113,47 @@ body{
 html {
   @apply h-full;
 }
+.glowy {
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease-in-out;
+}
 
-.glowy:hover{
-  transform:scale(1.1);
+.glowy::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: black; /* Couleur du voile de brillance */
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    pointer-events: none; /* Pour éviter que le pseudo-élément interfère avec les interactions utilisateur */
+    transform: translateX(-100%);
+}
+
+.glowy:hover {
+    transform: scale(1.2);
+}
+
+.glowy:hover::before {
+    animation: glowy-animation 1s ease-in-out forwards;
+}
+
+@keyframes glowy-animation {
+    0% {
+        opacity: 0;
+        transform: translateX(-100%);
+    }
+    50% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateX(100%);
+    }
 }
 
 

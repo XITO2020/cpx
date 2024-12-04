@@ -120,7 +120,7 @@ const Navbar: React.FC<NavProps> = ({ session }) => {
                     </div>
                     <div onClick={handleRandomizerClick} className="relative">
                         <NavbarItem className="font-earl tracking-wider randomizer-damage" label="Randomizer ! ! !" />
-                        <img src="/img/conspix/sandia.png" alt="pasteque en soutien à Gaza" className="sandia" />
+                        <img src="/icons/sandia.png" alt="pasteque en soutien à Gaza" className="sandia" />
                     </div>
                 </div>
                 <div onClick={toggleMobileMenu} className="lg:hidden flex flex-row items-center gap-2 ml-8 cursor-pointer relative">
