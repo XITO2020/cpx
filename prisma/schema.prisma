@@ -18,15 +18,15 @@ model User {
   createdAt       DateTime        @default(now())
   updatedAt       DateTime        @updatedAt
   favoriteIds     String[]
-  sessions        Session[]
-  account         Account[]
-  isPremium       Boolean
+  isPremium       Boolean?
   premiumDuration Int?
   provider        String?         @default("none")
-  admin           Boolean
-  linkedArticles  LinkedArticle[]
-  userMovies      UserMovie[]
+  admin           Boolean?        @default(false)
+  account         Account[]
   comments        Comment[]
+  linkedArticles  LinkedArticle[]
+  sessions        Session[]
+  userMovies      UserMovie[]
 }
 
 model Account {
@@ -42,7 +42,7 @@ model Account {
   scope             String?
   id_token          String?
   session_state     String?
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
@@ -52,8 +52,7 @@ model Session {
   SessionToken String   @unique
   userId       String
   expires      DateTime
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model VerificationToken {
@@ -66,91 +65,91 @@ model VerificationToken {
 }
 
 model Movie {
-  id              String          @id @default(uuid()) @map("_id")
-  title           String
-  description     String
-  thumbnailUrl    String?
-  videoUrl        String
-  language        String?
-  author          String?
-  duration        String?
+  id                String          @id @default(uuid()) @map("_id")
+  title             String
+  description       String
+  thumbnailUrl      String?
+  videoUrl          String
+  language          String?
+  author            String?
+  duration          String?
   verificationLevel Int?
-  year            Int?
-  rating          Float?
-  favoriteLength  Int
-  views           Int
-  outfileArticle  String?
-  isTrending      Boolean
-  isPremium       Boolean
-  premiumDuration Int  @default(90)
-  linkedArticles  LinkedArticle[]
-  comments        Comment[]
-  movieGenres     MovieGenre[]
-  userMovies      UserMovie[]
-  movieArticles   MovieArticle[]
+  year              Int?
+  rating            Float?
+  favoriteLength    Int
+  views             Int
+  outfileArticle    String?
+  isTrending        Boolean
+  isPremium         Boolean
+  premiumDuration   Int             @default(90)
+  comments          Comment[]
+  linkedArticles    LinkedArticle[]
+  movieArticles     MovieArticle[]
+  movieGenres       MovieGenre[]
+  userMovies        UserMovie[]
 }
 
 model LinkedArticle {
-  id          String   @id @default(uuid()) @map("_id")
-  title       String
-  description String
-  date        DateTime @default(now())
-  userId      String
-  movieId     String
-  imageOne    String
-  imageTwo    String
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  movie       Movie    @relation(fields: [movieId], references: [id], onDelete: Cascade)
+  id            String         @id @default(uuid()) @map("_id")
+  title         String
+  description   String
+  date          DateTime       @default(now())
+  userId        String
+  movieId       String
+  imageOne      String
+  imageTwo      String
+  comments      Comment[]
+  movie         Movie          @relation(fields: [movieId], references: [id], onDelete: Cascade)
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   movieArticles MovieArticle[]
-  comments    Comment[]
 }
 
 model Comment {
-  id        String   @id @default(uuid()) @map("_id")
-  content   String
-  date      DateTime @default(now())
-  likes     Int
-  dislikes  Int
-  ambiguous Int
-  best      Boolean
-  userId    String
-  movieId   String
+  id              String         @id @default(uuid()) @map("_id")
+  content         String
+  date            DateTime       @default(now())
+  likes           Int
+  dislikes        Int
+  ambiguous       Int
+  best            Boolean
+  userId          String
+  movieId         String
   linkedArticleId String?
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  movie     Movie    @relation(fields: [movieId], references: [id], onDelete: Cascade)
-  linkedArticle LinkedArticle? @relation(fields: [linkedArticleId], references: [id], onDelete: Cascade)
+  linkedArticle   LinkedArticle? @relation(fields: [linkedArticleId], references: [id], onDelete: Cascade)
+  movie           Movie          @relation(fields: [movieId], references: [id], onDelete: Cascade)
+  user            User           @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Genre {
-  id          String   @id @default(uuid()) @map("_id")
+  id          String       @id @default(uuid()) @map("_id")
   name        String
   qty         Int
   movieGenres MovieGenre[]
 }
 
 model UserMovie {
-  userId    String
-  movieId   String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  movie     Movie    @relation(fields: [movieId], references: [id], onDelete: Cascade)
+  userId  String
+  movieId String
+  movie   Movie  @relation(fields: [movieId], references: [id], onDelete: Cascade)
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([userId, movieId])
 }
 
 model MovieArticle {
-  movieId     String
-  articleId   String
-  movie       Movie    @relation(fields: [movieId], references: [id], onDelete: Cascade)
+  movieId       String
+  articleId     String
   linkedArticle LinkedArticle @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  movie         Movie         @relation(fields: [movieId], references: [id], onDelete: Cascade)
 
   @@id([movieId, articleId])
 }
 
 model MovieGenre {
-  movieId   String
-  genreId   String
-  movie     Movie    @relation(fields: [movieId], references: [id], onDelete: Cascade)
-  genre     Genre    @relation(fields: [genreId], references: [id], onDelete: Cascade)
+  movieId String
+  genreId String
+  genre   Genre  @relation(fields: [genreId], references: [id], onDelete: Cascade)
+  movie   Movie  @relation(fields: [movieId], references: [id], onDelete: Cascade)
 
   @@id([movieId, genreId])
 }

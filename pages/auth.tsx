@@ -37,7 +37,7 @@ const Auth = () =>{
             await signIn('credentials', {
                 email,
                 password,
-                callbackUrl: '/',
+                callbackUrl: '/profiles',
                 redirect: false,
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',

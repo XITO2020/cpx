@@ -65,8 +65,8 @@ export const authOptions: AuthOptions = {
       console.log("JWT callback:", { token, user })
       if (user) {
         token.id = user.id;
-        token.isPremium = (user as User).isPremium;
-        token.admin = (user as User).admin;
+        // token.isPremium = (user as User).isPremium;
+        // token.admin = (user as User).admin;
         token.email = (user as User).email;
         token.emailVerified = (user as User).emailVerified;
       }
@@ -77,8 +77,8 @@ export const authOptions: AuthOptions = {
       if (token && session?.user) {
         const user = session.user as User; // Assertion de type pour `session.user`
         user.id = token.id as string ?? null;
-        user.isPremium = token.isPremium as boolean ?? false;
-        user.admin = token.admin as boolean ?? false;
+        // user.isPremium = token.isPremium as boolean ?? false;
+        // user.admin = token.admin as boolean ?? false;
         user.email = token.email as string ?? '';
         user.emailVerified = token.emailVerified as boolean ?? false;
       }
