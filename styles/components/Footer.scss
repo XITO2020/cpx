@@ -1,0 +1,27 @@
+.footer {
+  @apply w-full netflix transition border-opacity-60 border-t-rose-700 border-t-2;
+
+  &-grid {
+    @apply grid grid-cols-5 gap-4 text-zinc-700 p-6;
+  }
+
+  &-link {
+    @apply text-center;
+
+    &-image {
+      @apply mx-auto opacity-70 hover:opacity-100 transition;
+
+      &.glowy {
+        filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.5));
+      }
+    }
+
+    &-desc {
+      @apply text-sm mt-1;
+    }
+  }
+
+  &-copyright {
+    @apply text-white text-center font-bebas tracking-wider mt-4;
+  }
+}

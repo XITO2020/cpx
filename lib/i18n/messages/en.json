@@ -1,0 +1,12 @@
+```json
+{
+  "nav": {
+    "home": "Home",
+    "series": "Series",
+    "films": "Films",
+    "newpopular": "New & Popular",
+    "mylist": "My List",
+    "browse": "Browse by languages"
+  }
+}
+```

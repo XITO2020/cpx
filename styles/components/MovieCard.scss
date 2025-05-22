@@ -1,0 +1,68 @@
+.movie-card {
+  @apply relative w-full;
+
+  // Base card styles
+  &-base {
+    @apply relative w-full h-[16vw] rounded-lg overflow-hidden;
+    @apply border-2 border-opacity-40 hover:border-rose-600;
+    @apply transition-all duration-300;
+  }
+
+  // Thumbnail image
+  &-thumbnail {
+    @apply w-full h-full object-cover;
+    @apply transition duration-300;
+    
+    .group:hover & {
+      @apply opacity-90;
+    }
+  }
+
+  // Hover content
+  &-hover {
+    @apply absolute top-4 left-5 w-full z-10;
+    @apply invisible sm:visible;
+    @apply transition-all duration-200;
+
+    .group:hover & {
+      @apply visible opacity-100 scale-100;
+    }
+  }
+
+  // Info panel
+  &-info {
+    @apply absolute bottom-0 w-full;
+    @apply bg-zinc-900 p-4 rounded-b-md;
+    @apply shadow-lg;
+  }
+
+  // Controls
+  &-controls {
+    @apply flex items-center gap-3;
+
+    &-button {
+      @apply w-10 h-10 rounded-full;
+      @apply flex items-center justify-center;
+      @apply transition-all duration-200;
+
+      &:hover {
+        @apply transform scale-110;
+      }
+
+      &:active {
+        @apply transform scale-95;
+      }
+    }
+  }
+
+  // Responsive styles
+  @screen sm {
+    &-hover {
+      @apply visible;
+    }
+  }
+
+  @screen lg {
+    width: 300px;
+  }
+}

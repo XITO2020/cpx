@@ -1,0 +1,50 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'bebas';
+  src: url('/fonts/bebas.otf') format('opentype');
+}
+
+:root {
+  --emeraude: #022c2288;
+  --samedi: rgba(237, 46, 106, 0.216);
+}
+
+@layer base {
+  body {
+    @apply bg-black text-white antialiased overflow-x-hidden min-h-screen;
+  }
+}
+
+@layer components {
+  .navbar {
+    @apply z-40;
+  }
+
+  .movie-list {
+    @apply px-4 py-8 pb-12 md:px-12 mt-4 space-y-8 relative;
+  }
+
+  .video-grid {
+    @apply grid gap-0 h-[85vh] w-[90%] mx-auto;
+    grid-template-columns: 20% 60% 20%;
+    grid-template-rows: 10% 35% 10% 35% 10%;
+  }
+}
+
+/* Custom animations */
+@keyframes growthing {
+  0% { transform: scale(.5); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(2.4); }
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .video-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto 1fr;
+  }
+}

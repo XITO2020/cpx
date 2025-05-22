@@ -1,0 +1,69 @@
+.inputfield {
+  @apply w-full px-4 py-3 rounded-lg text-white transition-all duration-300;
+  
+  &:focus {
+    @apply outline-none ring-2 ring-rose-500;
+  }
+
+  &::placeholder {
+    @apply text-gray-400;
+  }
+}
+
+.shadow {
+  &rose { @apply hover:shadow-rose-500/30; }
+  &indigo { @apply hover:shadow-indigo-500/30; }
+  &violet { @apply hover:shadow-violet-500/30; }
+  &teal { @apply hover:shadow-teal-500/30; }
+  &purple { @apply hover:shadow-purple-500/30; }
+  &fuchsia { @apply hover:shadow-fuchsia-500/30; }
+}
+
+.dropzone {
+  @apply border-2 border-dashed border-gray-600 rounded-lg p-8 text-center cursor-pointer
+         transition-all duration-300 hover:border-rose-500 hover:bg-rose-500/10;
+
+  &Active {
+    @apply border-rose-500 bg-rose-500/10;
+  }
+}
+
+.dashboardContainer {
+  @apply min-h-screen bg-gradient-to-b from-gray-900 to-black;
+}
+
+.contentSection {
+  @apply bg-zinc-900/50 rounded-lg p-6 backdrop-blur-sm;
+  
+  &:hover {
+    @apply bg-zinc-900/70;
+  }
+}
+
+.gridLayout {
+  @apply grid grid-cols-1 md:grid-cols-2 gap-6;
+}
+
+.statsCard {
+  @apply bg-zinc-800 p-4 rounded-lg;
+  
+  &Title {
+    @apply text-lg font-semibold text-white mb-2;
+  }
+  
+  &Value {
+    @apply text-2xl font-bold text-rose-500;
+  }
+}
+
+.tabButton {
+  @apply px-4 py-2 rounded-lg text-white transition-colors;
+  
+  &Active {
+    @apply bg-rose-600;
+  }
+  
+  &:not(&Active) {
+    @apply bg-zinc-800 hover:bg-zinc-700;
+  }
+}

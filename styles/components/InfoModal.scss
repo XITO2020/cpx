@@ -1,0 +1,32 @@
+.info-modal {
+  &-overlay {
+    @apply fixed inset-0 z-50 flex items-center justify-center bg-black/80;
+  }
+
+  &-content {
+    @apply relative mx-auto max-w-xl max-h-[66vh] rounded-md min-w-[32vw];
+  }
+
+  &-inner {
+    @apply relative bg-zinc-900 rounded-md drop-shadow-md border-4 border-violet-600/40;
+  }
+
+  &-video {
+    @apply w-full h-full object-cover brightness-[60%];
+  }
+
+  &-close {
+    @apply absolute top-3 right-3 h-10 w-10 rounded-full
+           bg-violet-600/70 flex items-center justify-center
+           border-2 border-rose-500 cursor-pointer;
+  }
+
+  &-title {
+    @apply text-white text-3xl md:text-4xl lg:text-5xl font-bold;
+  }
+
+  &-description {
+    @apply bg-zinc-700 rounded-lg border-2 border-red-500 
+           p-4 text-zinc-300 text-xl;
+  }
+}

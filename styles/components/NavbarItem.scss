@@ -1,0 +1,27 @@
+```scss
+.navbar-item {
+  @apply relative text-white cursor-pointer transition-colors duration-300;
+
+  &-active {
+    @apply text-rose-500;
+  }
+
+  &-underline {
+    @apply absolute -bottom-1 left-0 right-0 h-0.5 bg-rose-500;
+  }
+
+  &:hover {
+    @apply text-gray-300;
+
+    &:not(.navbar-item-active) {
+      .navbar-item-underline {
+        @apply opacity-50;
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    @apply text-lg py-2;
+  }
+}
+```

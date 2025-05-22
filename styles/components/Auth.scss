@@ -1,0 +1,63 @@
+.auth {
+  &-container {
+    @apply relative h-screen w-full bg-no-repeat bg-center bg-fixed bg-cover;
+  }
+
+  &-overlay {
+    @apply bg-black w-full h-full lg:bg-opacity-50;
+  }
+
+  &-form {
+    @apply bg-black bg-opacity-70 px-16 py-16 self-center mt-2 
+           lg:w-2/5 lg:max-w-md rounded-md w-full;
+  }
+
+  &-title {
+    @apply text-white text-4xl mb-8 font-semibold;
+  }
+
+  &-error {
+    @apply text-red-500 text-sm mt-3;
+  }
+
+  &-submit {
+    @apply bg-rose-600 py-3 text-white rounded-md w-full mt-10 
+           hover:bg-rose-700 transition disabled:opacity-50;
+  }
+
+  &-divider {
+    @apply relative flex items-center my-8;
+
+    &::before,
+    &::after {
+      @apply flex-grow border-t border-gray-300;
+      content: '';
+    }
+
+    &-text {
+      @apply px-2 text-gray-500 bg-black text-sm;
+    }
+  }
+
+  &-social {
+    @apply grid grid-cols-2 gap-4;
+
+    &-button {
+      @apply flex items-center justify-center gap-2 text-white p-3 
+             rounded-lg hover:bg-opacity-90 transition-all;
+
+      &-discord { @apply bg-[#5865F2]; }
+      &-patreon { @apply bg-[#FF424D]; }
+      &-mastodon { @apply bg-[#6364FF]; }
+      &-tiktok { @apply bg-black; }
+    }
+  }
+
+  &-toggle {
+    @apply text-neutral-500 mt-12;
+
+    &-button {
+      @apply text-white ml-1 hover:underline cursor-pointer;
+    }
+  }
+}

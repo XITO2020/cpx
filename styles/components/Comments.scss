@@ -1,0 +1,45 @@
+.comments {
+  &-container {
+    @apply w-full text-white;
+  }
+
+  &-form {
+    @apply mb-6;
+
+    textarea {
+      @apply w-full bg-zinc-800 text-white rounded-lg p-4 min-h-[100px]
+             focus:ring-2 focus:ring-rose-500 focus:outline-none
+             placeholder-gray-400 resize-none;
+    }
+
+    button {
+      @apply absolute bottom-4 right-4 bg-rose-600 text-white px-4 py-2
+             rounded-md hover:bg-rose-700 transition-colors disabled:opacity-50
+             disabled:cursor-not-allowed;
+    }
+  }
+
+  &-list {
+    @apply space-y-4;
+  }
+
+  &-item {
+    @apply bg-zinc-800 rounded-lg p-4;
+
+    &-header {
+      @apply flex items-center justify-between mb-2;
+    }
+
+    &-author {
+      @apply font-semibold text-rose-500;
+    }
+
+    &-date {
+      @apply text-sm text-gray-400;
+    }
+
+    &-content {
+      @apply text-gray-300;
+    }
+  }
+}
