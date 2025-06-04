@@ -65,23 +65,45 @@ export const authOptions: AuthOptions = {
       console.log("JWT callback:", { token, user })
       if (user) {
         token.id = user.id;
-        // token.isPremium = (user as User).isPremium;
-        // token.admin = (user as User).admin;
-        token.email = (user as User).email;
-        token.emailVerified = (user as User).emailVerified;
+        const dbUser = user as any; // Cast to access potential custom fields like admin/isPremium
+        if (dbUser.admin === true) {
+          token.role = 'ADMIN';
+        } else if (dbUser.isPremium === true) {
+          token.role = 'PREMIUM';
+        } else {
+          token.role = 'USER';
+        }
+        token.email = dbUser.email;
+        token.emailVerified = dbUser.emailVerified; // Assuming this is already Date or null from dbUser
+
+        // Populate additional fields
+        token.name = dbUser.name;
+        token.image = dbUser.image;
+        token.createdAt = dbUser.createdAt?.toISOString(); // Convert Date to ISO string
+        token.isPremium = dbUser.isPremium;
+        token.isAdmin = dbUser.admin; // Assuming dbUser.admin is the correct field name
+        token.tabzBalance = dbUser.tabzBalance;
       }
       return token;
     },
     async session({ session, token }) {
       console.log("session callback: ", {session, token})
       if (token && session?.user) {
-        const user = session.user as User; // Assertion de type pour `session.user`
-        user.id = token.id as string ?? null;
-        // user.isPremium = token.isPremium as boolean ?? false;
-        // user.admin = token.admin as boolean ?? false;
-        user.email = token.email as string ?? '';
-        // Si token.emailVerified existe, on le considère comme vérifié
-        user.emailVerified = token.emailVerified ? new Date() : null; 
+        const sessionUser = session.user as any; // Cast to add custom fields
+
+        // Existing assignments
+        sessionUser.id = token.id as string;
+        sessionUser.role = token.role as string;
+        sessionUser.email = token.email as string;
+        sessionUser.emailVerified = token.emailVerified; // Assuming this is Date or null from token
+
+        // Add new fields from token to session.user
+        sessionUser.name = token.name as string | null;
+        sessionUser.image = token.image as string | null;
+        sessionUser.createdAt = token.createdAt as string | null; // Expect string from token
+        sessionUser.isPremium = token.isPremium as boolean | null;
+        sessionUser.isAdmin = token.isAdmin as boolean | null; // Corresponds to token.isAdmin
+        sessionUser.tabzBalance = token.tabzBalance as number | null;
       }
       return session;
     }

@@ -7,17 +7,29 @@ import { CustomSession, Movie } from '@/lib/types';
 import Navbar from '@/components/Navbar';
 import VideoCollections from '@/components/profile/VideoCollections';
 import CreateCollection from '@/components/profile/CreateCollection';
-import useCurrentUser from '@/hooks/useCurrentUser';
+import { useUser } from '@/contexts/UserContext'; // Ensure this is the only user-related hook import
 import useMovieList from '@/hooks/useMovieList';
 
 interface ProfileProps {
-  session: CustomSession | null;
+  session: CustomSession | null; // session prop can remain for Navbar or other direct uses
 }
 
 const Profile: React.FC<ProfileProps> = ({ session }) => {
-  const { data: currentUser } = useCurrentUser();
+  const { user: contextUser, isLoading: isContextLoading } = useUser();
   const { movies } = useMovieList();
   const [showCreateModal, setShowCreateModal] = useState(false);
+
+  // Loading state based on context
+  if (isContextLoading && !contextUser) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black flex flex-col items-center justify-center">
+        <Navbar session={session} /> {/* Optional: Show Navbar during loading */}
+        <div className="flex-grow flex items-center justify-center">
+          <p className="text-white text-xl">Loading profile...</p>
+        </div>
+      </div>
+    );
+  }
 
   const systemCategories = [
     'War',
@@ -49,16 +61,16 @@ const Profile: React.FC<ProfileProps> = ({ session }) => {
           >
             <div className="flex items-center gap-6">
               <img
-                src={currentUser?.image || '/img/avatars-kings.png'}
+                src={contextUser?.image || '/img/avatars-kings.png'}
                 alt="Profile"
                 className="w-24 h-24 rounded-full"
               />
               <div>
                 <h1 className="text-3xl font-bold text-white mb-2">
-                  {currentUser?.name}'s Collections
+                  {contextUser?.name}'s Collections
                 </h1>
                 <p className="text-gray-400">
-                  Member since {new Date(currentUser?.createdAt || '').toLocaleDateString()}
+                  Member since {contextUser?.createdAt ? new Date(contextUser.createdAt).toLocaleDateString() : 'N/A'}
                 </p>
               </div>
             </div>

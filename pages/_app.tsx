@@ -1,4 +1,5 @@
 import { ThemeProvider } from '@/components/ThemeProvider';
+import { UserProvider } from '../contexts/UserContext'; // Adjust path as needed
 import { SessionProvider } from 'next-auth/react';
 import { AppProps } from 'next/app';
 import '@/styles/globals.css';
@@ -9,9 +10,11 @@ export default function App({
 }: AppProps) {
   return (
     <SessionProvider session={session}>
-      <ThemeProvider>
-        <Component {...pageProps} />
-      </ThemeProvider>
+      <UserProvider>
+        <ThemeProvider>
+          <Component {...pageProps} />
+        </ThemeProvider>
+      </UserProvider>
     </SessionProvider>
   );
 }

@@ -1,8 +1,23 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getServerSession } from 'next-auth';
+import { NextApiRequest, NextApiResponse } from 'next';
+import { getServerSession, Session } from 'next-auth'; // Import Session
 import { authOptions } from '../auth/[...nextauth]';
 import prismadb from '@/lib/prismadb';
-import { CustomSession } from '@/lib/types';
+// Remove: import { CustomSession } from '@/lib/types'; // If this was a generic one, we'll define locally or ensure it matches
+
+// Define an interface for the session user that includes id and role
+interface SessionUser {
+  id?: string; // Or string if always present
+  name?: string | null;
+  email?: string | null;
+  image?: string | null;
+  role?: string | null;
+}
+
+// Define an interface for the session that includes the custom user
+interface CustomAuthSession extends Session {
+  user?: SessionUser;
+}
 
 export const config = {
   api: {
@@ -30,19 +45,22 @@ export default async function handler(
   }
 
   try {
-    const session = await getServerSession(req, res, authOptions);
+    const session = await getServerSession(req, res, authOptions) as CustomAuthSession | null;
 
-    if (!session?.user?.email) {
-      return res.status(401).json({ error: 'Unauthorized' });
+    if (!session?.user?.email) { // Basic authentication check
+      return res.status(401).json({ error: 'Unauthorized - Not logged in' });
     }
 
-    const user = await prismadb.user.findUnique({
-      where: { email: session.user.email },
-      select: { id: true, admin: true }
-    });
+    // Role-based authorization
+    if (session.user.role !== 'ADMIN') {
+      return res.status(403).json({ error: 'Forbidden - Only admins can upload articles' });
+    }
 
-    if (!user) {
-      return res.status(401).json({ error: 'User not found' });
+    const userId = session.user.id;
+    if (!userId) {
+        // This case should ideally not be reached if session.user.email is present
+        // and NextAuth is configured to include ID.
+        return res.status(401).json({ error: 'Unauthorized - User ID missing in session' });
     }
 
     const {
@@ -63,8 +81,8 @@ export default async function handler(
         title,
         description,
         content,
-        imageOne: thumbnailUrl,
-        userId: user.id,
+        imageOne: thumbnailUrl, // Assuming imageOne is the correct field for thumbnailUrl
+        userId: userId, // Use userId from session
         ...(movieId && { movieId }),
         ...(tags && {
           tags: {
@@ -89,6 +107,6 @@ export default async function handler(
     return res.status(201).json(article);
   } catch (error) {
     console.error('[Article Upload Error]:', error);
-    return res.status(500).json({ error: 'Failed to create article' });
+    return res.status(500).json({ error: 'Failed to create article due to an internal error' });
   }
 }
